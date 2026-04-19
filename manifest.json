@@ -1,18 +1,9 @@
 {
   "name": "Lexup — Le droit, enfin simple",
   "short_name": "Lexup",
-  "description": "Maîtrise le droit avec la méthode 80/20 — pour tous les profils",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#F7F5FF",
   "theme_color": "#6C63FF",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
 }
