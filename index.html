@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -755,16 +754,31 @@ async function reqNotif(){
   ST.notif2=document.getElementById('t2').value||'12:00';
   save();
   const s=document.getElementById('nsts');
-  if(!('Notification' in window)){s.textContent='Notifications non supportées.';return;}
-  const p=await Notification.requestPermission();
-  if(p==='granted'){
-    s.textContent='Activées ! Notion à '+ST.notif1+' et actu à '+ST.notif2;
-    document.getElementById('nbtn').textContent='Notifications activées';
-    document.getElementById('nbtn').style.background='var(--g)';
-    localStorage.setItem('lxnotif','on');
-    scheduleNotifs();
-  } else {
-    s.textContent='Refusées. Active dans Réglages → Notifications → Lexup.';
+  const btn=document.getElementById('nbtn');
+  if(!('Notification' in window)){
+    s.textContent='Non supporté. Ouvre l\'app depuis l\'icône sur l\'écran d\'accueil (pas Safari).';
+    return;
+  }
+  if(Notification.permission==='granted'){
+    s.textContent='Déjà activées ! Notion à '+ST.notif1+' et actu à '+ST.notif2;
+    btn.textContent='Notifications activées';btn.style.background='var(--g)';
+    localStorage.setItem('lxnotif','on');scheduleNotifs();return;
+  }
+  if(Notification.permission==='denied'){
+    s.textContent='Bloquées. Va dans Réglages iPhone → Notifications → Lexup → active-les.';return;
+  }
+  try {
+    const p=await Notification.requestPermission();
+    if(p==='granted'){
+      s.textContent='Activées ! Notion à '+ST.notif1+' et actu à '+ST.notif2;
+      btn.textContent='Notifications activées';btn.style.background='var(--g)';
+      localStorage.setItem('lxnotif','on');scheduleNotifs();
+      setTimeout(()=>sendN({title:'Lexup — C\'est parti !',body:'Tu recevras une notion et une actu chaque jour.'},'welcome'),800);
+    } else {
+      s.textContent='Refusées. Va dans Réglages iPhone → Notifications → Lexup.';
+    }
+  } catch(e){
+    s.textContent='Erreur : '+e.message+'. Ouvre l\'app depuis l\'écran d\'accueil.';
   }
 }
 function getRandNotion(){
