@@ -793,10 +793,13 @@ function getRandActu(){
 }
 function sendN(d,tag){
   if(Notification.permission!=='granted')return;
-  const payload={type:'NOTIF',title:d.title,body:d.body,tag:tag||'lexup'};
-  if('serviceWorker' in navigator&&navigator.serviceWorker.controller){
-    navigator.serviceWorker.controller.postMessage(payload);
-  } else {new Notification(d.title,{body:d.body});}
+  if('serviceWorker' in navigator&&navigator.serviceWorker.ready){
+    navigator.serviceWorker.ready.then(reg=>{
+      reg.showNotification(d.title,{body:d.body,tag:tag||'lexup',renotify:true});
+    }).catch(()=>{try{new Notification(d.title,{body:d.body})}catch(e){}});
+  } else {
+    try{new Notification(d.title,{body:d.body})}catch(e){}
+  }
 }
 function scheduleNotifs(){
   const sched=(hhmm,fn,tag)=>{
