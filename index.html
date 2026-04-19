@@ -1,1 +1,813 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6C63FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Lexup — Le droit, enfin simple</title>
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --p:#6C63FF;--pl:#A78BFA;--pxl:#F0EEFF;
+  --y:#FFB347;--yl:#FFF3DC;--yd:#8A5A00;
+  --g:#5DCAA5;--gl:#EDFAF4;--gd:#0F6E56;
+  --r:#FF7B7B;--rl:#FFF0EE;--rd:#C0392B;
+  --bg:#F7F5FF;--sur:#FFFFFF;--tx:#1A1040;--tx2:#5A5A7A;--tx3:#A0A0C0;
+  --brd:#E8E5FF;--font:'Nunito',sans-serif;--radius:14px;--rsm:10px;
+}
+html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--tx);overflow:hidden}
+#app{height:100%;display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:relative}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── ONBOARDING ── */
+#ob{position:absolute;inset:0;background:var(--bg);z-index:200;overflow-y:auto;display:flex;flex-direction:column}
+.obs{display:none;flex-direction:column;min-height:100%;padding:max(env(safe-area-inset-top),28px) 1.5rem 2rem;animation:fadeUp .3s ease}
+.obs.active{display:flex}
+.ob-dots{display:flex;gap:5px;justify-content:center;padding:.75rem 0}
+.ob-d{width:6px;height:6px;border-radius:3px;background:var(--brd);transition:all .2s}
+.ob-d.on{width:20px;background:var(--p)}
+.ob-title{font-size:24px;font-weight:900;color:var(--tx);line-height:1.2;margin-bottom:.4rem;letter-spacing:-.03em}
+.ob-title b{color:var(--p)}
+.ob-sub{font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:1.25rem}
+.ob-cta{background:var(--p);color:#fff;border:none;border-radius:var(--radius);padding:14px;font-size:15px;font-weight:800;width:100%;cursor:pointer;font-family:var(--font);margin-top:auto;transition:opacity .15s}
+.ob-cta:disabled{opacity:.35;pointer-events:none}
+.ob-note{font-size:11px;color:var(--tx3);text-align:center;margin-top:.4rem}
+.pi{background:var(--sur);border:2px solid var(--brd);border-radius:var(--radius);padding:.8rem 1rem;display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:8px;transition:all .15s}
+.pi.sel{border-color:var(--p);background:var(--pxl)}
+.pi-ico{font-size:20px;width:40px;height:40px;background:var(--bg);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pi-name{font-size:13px;font-weight:800;color:var(--tx)}
+.pi-desc{font-size:11px;color:var(--tx2);margin-top:1px}
+.pi-arr{margin-left:auto;color:var(--tx3);font-size:18px}
+.pi.sel .pi-arr{color:var(--p)}
+.spec-g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.si{background:var(--sur);border:2px solid var(--brd);border-radius:var(--radius);padding:.85rem;cursor:pointer;text-align:center;transition:all .15s}
+.si.sel{border-color:var(--p);background:var(--pxl)}
+.si-ico{font-size:22px;margin-bottom:4px}
+.si-name{font-size:12px;font-weight:800;color:var(--tx);margin-bottom:2px}
+.si-proc{font-size:10px;color:var(--tx2)}
+
+/* ── HEADER ── */
+.hdr{background:var(--sur);padding:max(env(safe-area-inset-top),12px) 1.25rem 10px;border-bottom:1px solid var(--brd);flex-shrink:0;padding-top:calc(max(env(safe-area-inset-top),12px) + 2px)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.logo{font-size:19px;font-weight:900;color:var(--tx);letter-spacing:-.03em}
+.logo b{color:var(--p)}
+.streak{background:var(--yl);color:var(--yd);font-size:12px;font-weight:800;padding:4px 10px;border-radius:20px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.st{background:var(--bg);border-radius:8px;padding:6px;text-align:center}
+.st-v{font-size:17px;font-weight:900;color:var(--tx)}
+.st-l{font-size:9px;color:var(--tx2);font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+
+/* ── TABS ── */
+.tabs{display:flex;background:var(--sur);border-bottom:1px solid var(--brd);flex-shrink:0}
+.tab{flex:1;padding:9px 2px;text-align:center;font-size:11px;font-weight:700;color:var(--tx3);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .15s;font-family:var(--font)}
+.tab.on{color:var(--p);border-bottom-color:var(--p)}
+
+/* ── CONTENT ── */
+.cnt{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1rem;padding-bottom:max(env(safe-area-inset-bottom),16px)}
+.sec{display:none}.sec.on{display:block;animation:fadeUp .22s ease}
+
+/* ── MATIÈRES ── */
+.mat-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mc{border-radius:var(--radius);padding:.9rem;cursor:pointer;border:2.5px solid transparent;transition:all .15s}
+.mc.sel{border-color:var(--p)}
+.mc-ico{font-size:22px;margin-bottom:5px}
+.mc-name{font-size:13px;font-weight:800;color:var(--tx);margin-bottom:2px}
+.mc-ct{font-size:10px;font-weight:600;opacity:.6;color:var(--tx)}
+.mc-bar{height:3px;background:rgba(0,0,0,.08);border-radius:2px;margin-top:7px}
+.mc-fill{height:100%;border-radius:2px;background:rgba(0,0,0,.2);transition:width .4s}
+.chip-btn{display:inline-flex;align-items:center;gap:5px;background:var(--pxl);color:var(--p);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:.75rem;cursor:pointer;border:none;font-family:var(--font)}
+
+/* ── FLASHCARD ── */
+.fc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem}
+.fc-mn{font-size:12px;font-weight:700;color:var(--tx2)}
+.fc-cn{font-size:12px;color:var(--tx3);font-weight:600}
+.pbar{height:4px;background:var(--brd);border-radius:2px;margin-bottom:.65rem}
+.pfill{height:100%;border-radius:2px;background:var(--p);transition:width .3s}
+.fcard{border-radius:var(--radius);padding:1.35rem;min-height:185px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;border:1.5px solid rgba(0,0,0,.05);transition:transform .12s}
+.fcard:active{transform:scale(.98)}
+.fc-bdg{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:700;margin-bottom:.65rem}
+.fc-q{font-size:15px;font-weight:800;color:var(--tx);line-height:1.45;letter-spacing:-.02em}
+.fc-a{font-size:13px;color:var(--tx);line-height:1.7;border-top:1.5px solid rgba(0,0,0,.06);padding-top:.65rem;margin-top:.65rem;display:none;animation:fadeUp .2s ease;font-weight:600}
+.fc-a.show{display:block}
+.fc-src{font-size:11px;color:var(--tx3);margin-top:.4rem;font-style:italic}
+.fc-hint{font-size:12px;color:var(--tx3);text-align:center;margin-top:.65rem;font-weight:600}
+.brow{display:flex;gap:8px;margin-top:.65rem}
+.btn{flex:1;padding:10px;border-radius:var(--rsm);border:none;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font);transition:transform .12s}
+.btn:active{transform:scale(.96)}
+.btn-ko{background:var(--rl);color:var(--rd)}
+.btn-ok{background:var(--gl);color:var(--gd)}
+.btn-nxt{background:var(--sur);color:var(--p);border:2px solid var(--p);margin-top:8px;width:100%;padding:10px;border-radius:var(--rsm);font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font)}
+
+/* ── FICHES ── */
+.fb{background:var(--sur);border-radius:var(--radius);padding:1.15rem;margin-bottom:10px;border:1px solid var(--brd)}
+.fb-t{font-size:14px;font-weight:800;margin-bottom:.65rem}
+.notion{display:flex;gap:7px;margin-bottom:7px;font-size:13px;color:var(--tx2);line-height:1.6;align-items:flex-start}
+.ndot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:7px}
+.src-line{font-size:11px;color:var(--tx3);font-style:italic;margin-top:.5rem;padding-top:.5rem;border-top:1px solid var(--brd)}
+
+/* ── QUIZ ── */
+.qtxt{font-size:15px;font-weight:800;color:var(--tx);margin-bottom:.85rem;line-height:1.45}
+.opt{width:100%;text-align:left;padding:11px 13px;margin-bottom:7px;background:var(--sur);border:2px solid var(--brd);border-radius:var(--rsm);font-size:13px;font-weight:700;cursor:pointer;color:var(--tx);font-family:var(--font);transition:all .12s}
+.opt.ok{background:var(--gl);border-color:var(--g);color:var(--gd)}
+.opt.ko{background:var(--rl);border-color:var(--r);color:var(--rd)}
+.expl{font-size:12px;color:var(--tx2);background:var(--bg);border-radius:var(--rsm);padding:.75rem;margin-top:.4rem;line-height:1.6;display:none;border-left:3px solid var(--p);animation:fadeUp .2s ease;font-weight:600}
+.expl.show{display:block}
+.qres{text-align:center;padding:1.5rem 0;display:none}
+.qres.show{display:block;animation:fadeUp .3s ease}
+
+/* ── PAYWALL ── */
+.blur-wrap{position:relative;overflow:hidden;border-radius:var(--radius)}
+.blur-content{filter:blur(5px);user-select:none;pointer-events:none;opacity:.6}
+.paywall-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(to bottom,rgba(247,245,255,0) 0%,rgba(247,245,255,.85) 30%,rgba(247,245,255,1) 100%);padding:1rem;text-align:center}
+.pw-title{font-size:15px;font-weight:900;color:var(--tx);margin-bottom:.35rem}
+.pw-sub{font-size:12px;color:var(--tx2);margin-bottom:.85rem;line-height:1.5}
+.pw-btn{background:var(--p);color:#fff;border:none;border-radius:var(--radius);padding:12px 24px;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--font);margin-bottom:.3rem}
+.pw-note{font-size:10px;color:var(--tx3)}
+.trial-badge{display:inline-block;background:var(--gl);color:var(--gd);font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;margin-bottom:.5rem}
+
+/* ── ACTU ── */
+.actu-card{background:var(--sur);border-radius:var(--radius);border:1px solid var(--brd);padding:1.15rem;margin-bottom:10px;cursor:pointer}
+.actu-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-bottom:.5rem}
+.actu-title{font-size:14px;font-weight:800;color:var(--tx);margin-bottom:.4rem;line-height:1.4}
+.actu-preview{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:.4rem}
+.actu-body{font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:.6rem;display:none}
+.actu-body.show{display:block;animation:fadeUp .2s ease}
+.actu-src{font-size:11px;color:var(--tx3);font-style:italic}
+.actu-toggle{font-size:12px;font-weight:700;color:var(--p);border:none;background:none;cursor:pointer;font-family:var(--font);padding:0}
+
+/* ── NOTIFS TAB ── */
+.ncard{background:var(--sur);border-radius:var(--radius);border:1px solid var(--brd);padding:1.15rem;margin-bottom:10px}
+.ncard-t{font-size:14px;font-weight:800;color:var(--tx);margin-bottom:.4rem}
+.ncard-d{font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:.65rem}
+.btn-p{background:var(--p);color:#fff;border:none;border-radius:var(--rsm);padding:11px;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font);width:100%;transition:opacity .15s}
+.btn-g{background:var(--bg);color:var(--p);border:2px solid var(--p);border-radius:var(--rsm);padding:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font);width:100%;margin-top:7px}
+.smsg{font-size:12px;color:var(--tx2);margin-top:.4rem;text-align:center;font-weight:600}
+.time-row{display:flex;align-items:center;gap:10px;margin-bottom:.5rem}
+.time-lbl{font-size:13px;font-weight:700;color:var(--tx);flex:1}
+.time-inp{border:2px solid var(--brd);border-radius:8px;padding:6px 10px;font-size:14px;font-weight:700;font-family:var(--font);color:var(--tx);background:var(--bg);width:90px}
+.weak-item{display:flex;align-items:center;justify-content:space-between;padding:.45rem .65rem;background:var(--bg);border-radius:8px;margin-bottom:5px;font-size:12px;font-weight:700}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ONBOARDING -->
+<div id="ob">
+  <div class="obs active" id="ob1">
+    <div class="ob-dots"><div class="ob-d on"></div><div class="ob-d"></div><div class="ob-d"></div></div>
+    <div style="font-size:42px;margin:1rem 0 .75rem">⚡</div>
+    <div class="ob-title">Bienvenue sur <b>Lexup</b> !</div>
+    <div class="ob-sub">Le droit rendu simple et efficace. Maîtrise l'essentiel avec la règle 80/20 — apprends ce qui compte vraiment, avec les bonnes sources.</div>
+    <div style="background:var(--gl);border-radius:var(--radius);padding:1rem;margin-bottom:1rem">
+      <div style="font-size:13px;font-weight:800;color:var(--gd);margin-bottom:.3rem">7 jours gratuits, sans carte bancaire</div>
+      <div style="font-size:12px;color:var(--gd);line-height:1.5">Accès complet pendant 7 jours. Ensuite, choisis l'abonnement adapté à ton profil.</div>
+    </div>
+    <div style="flex:1"></div>
+    <button class="ob-cta" onclick="obNext(2)">Commencer gratuitement →</button>
+  </div>
+
+  <div class="obs" id="ob2">
+    <div class="ob-dots"><div class="ob-d"></div><div class="ob-d on"></div><div class="ob-d"></div></div>
+    <div class="ob-title">Tu es <b>qui</b> ?</div>
+    <div class="ob-sub">Choisis ton profil pour personnaliser ton contenu.</div>
+    <div id="pilist">
+      <div class="pi" onclick="selP('curieux',this)"><div class="pi-ico">🌍</div><div><div class="pi-name">Je suis curieux</div><div class="pi-desc">Culture juridique du quotidien</div></div><div class="pi-arr">›</div></div>
+      <div class="pi" onclick="selP('pro',this)"><div class="pi-ico">💼</div><div><div class="pi-name">Je suis professionnel</div><div class="pi-desc">RH, manager, entrepreneur</div></div><div class="pi-arr">›</div></div>
+      <div class="pi" onclick="selP('etudiant',this)"><div class="pi-ico">🎓</div><div><div class="pi-name">Je suis étudiant en droit</div><div class="pi-desc">Fac de droit, L1 à M2</div></div><div class="pi-arr">›</div></div>
+      <div class="pi" onclick="selP('crfpa',this)"><div class="pi-ico">⚖️</div><div><div class="pi-name">Je prépare le CRFPA</div><div class="pi-desc">Candidat au barreau</div></div><div class="pi-arr">›</div></div>
+    </div>
+    <button class="ob-cta" id="ob2btn" onclick="obNext(3)" disabled>Continuer →</button>
+  </div>
+
+  <div class="obs" id="ob3">
+    <div class="ob-dots"><div class="ob-d"></div><div class="ob-d"></div><div class="ob-d on"></div></div>
+    <div class="ob-title" id="ob3t">Ta <b>spécialité</b> CRFPA ?</div>
+    <div class="ob-sub" id="ob3s">Elle détermine ta procédure et ton contenu personnalisé. Modifiable dans les paramètres.</div>
+    <div class="spec-g" id="specg">
+      <div class="si" onclick="selS('civil',this)"><div class="si-ico">📋</div><div class="si-name">Droit civil</div><div class="si-proc">Procédure civile</div></div>
+      <div class="si" onclick="selS('affaires',this)"><div class="si-ico">🏢</div><div class="si-name">Droit des affaires</div><div class="si-proc">Procédure civile</div></div>
+      <div class="si" onclick="selS('penal',this)"><div class="si-ico">🔒</div><div class="si-name">Droit pénal</div><div class="si-proc">Procédure pénale</div></div>
+      <div class="si" onclick="selS('social',this)"><div class="si-ico">👔</div><div class="si-name">Droit social</div><div class="si-proc">Procédure civile</div></div>
+      <div class="si" onclick="selS('admin',this)"><div class="si-ico">🏛️</div><div class="si-name">Droit administratif</div><div class="si-proc">Procédure admin.</div></div>
+      <div class="si" onclick="selS('international',this)"><div class="si-ico">🌐</div><div class="si-name">Droit international</div><div class="si-proc">Procédure civile</div></div>
+      <div class="si" onclick="selS('fiscal',this)"><div class="si-ico">💰</div><div class="si-name">Droit fiscal</div><div class="si-proc">Procédure admin.</div></div>
+    </div>
+    <button class="ob-cta" id="ob3btn" onclick="finOb()" disabled>C'est parti !</button>
+    <div class="ob-note">Modifiable à tout moment dans les paramètres</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="hdr">
+  <div class="hdr-row">
+    <div class="logo">Lex<b>up</b></div>
+    <div class="streak" id="streak">0 🔥</div>
+  </div>
+  <div class="stats">
+    <div class="st"><div class="st-v" id="sv">0</div><div class="st-l">Vues</div></div>
+    <div class="st"><div class="st-v" id="sok">0</div><div class="st-l">Maîtrisées</div></div>
+    <div class="st"><div class="st-v" id="spct">0%</div><div class="st-l">Score</div></div>
+  </div>
+</div>
+<div class="tabs">
+  <div class="tab on" onclick="showTab('tm',this)">Matières</div>
+  <div class="tab" onclick="showTab('tf',this)">Flashcards</div>
+  <div class="tab" onclick="showTab('tfi',this)">Fiches</div>
+  <div class="tab" onclick="showTab('tq',this)">Quiz</div>
+  <div class="tab" onclick="showTab('ta',this)">Actus</div>
+  <div class="tab" onclick="showTab('tn',this)">Param.</div>
+</div>
+<div class="cnt">
+  <!-- MATIÈRES -->
+  <div id="tm" class="sec on">
+    <button class="chip-btn" onclick="showTab('tn',document.querySelectorAll('.tab')[5])" id="pchip">Modifier mon profil</button>
+    <div class="mat-g" id="mgrid"></div>
+  </div>
+  <!-- FLASHCARDS -->
+  <div id="tf" class="sec">
+    <div class="fc-top"><span class="fc-mn" id="fcmn"></span><span class="fc-cn" id="fccn">1/1</span></div>
+    <div class="pbar"><div class="pfill" id="fcp"></div></div>
+    <div class="fcard" id="fccard" onclick="revFC()">
+      <div><span class="fc-bdg" id="fcbdg"></span><div class="fc-q" id="fcq"></div><div class="fc-a" id="fca"></div><div class="fc-src" id="fcsrc"></div></div>
+      <div class="fc-hint" id="fch">Appuie pour révéler la réponse</div>
+    </div>
+    <div class="brow"><button class="btn btn-ko" onclick="rateFC(false)">À revoir</button><button class="btn btn-ok" onclick="rateFC(true)">Maîtrisé</button></div>
+    <button class="btn-nxt" onclick="nextFC()">Carte suivante →</button>
+  </div>
+  <!-- FICHES -->
+  <div id="tfi" class="sec">
+    <div id="fichmn" style="font-size:12px;font-weight:700;color:var(--tx2);margin-bottom:.65rem"></div>
+    <div id="fichcnt"></div>
+  </div>
+  <!-- QUIZ -->
+  <div id="tq" class="sec">
+    <div class="fc-top"><span class="fc-mn" id="qmn"></span><span class="fc-cn" id="qcn">1/1</span></div>
+    <div class="pbar"><div class="pfill" id="qp"></div></div>
+    <div class="fb"><div class="qtxt" id="qtxt"></div><div id="qopts"></div><div class="expl" id="qexpl"></div></div>
+    <button class="btn-nxt" id="qnxt" style="display:none" onclick="nextQ()">Question suivante →</button>
+    <div class="qres" id="qres">
+      <div style="font-size:36px;margin-bottom:.4rem">🏆</div>
+      <div style="font-size:17px;font-weight:900;margin-bottom:.2rem" id="qrsc"></div>
+      <div style="font-size:12px;color:var(--tx2)" id="qrmsg"></div>
+      <button class="btn-p" style="margin-top:.85rem" onclick="rstQ()">Recommencer</button>
+    </div>
+  </div>
+  <!-- ACTUS -->
+  <div id="ta" class="sec">
+    <div style="font-size:12px;font-weight:700;color:var(--tx2);margin-bottom:.65rem">Actualité juridique — mise à jour hebdomadaire</div>
+    <div id="actu-list"></div>
+  </div>
+  <!-- PARAMÈTRES -->
+  <div id="tn" class="sec">
+    <div class="ncard">
+      <div class="ncard-t">Notifications</div>
+      <div class="ncard-d">Reçois une notion clé et une actualité juridique chaque jour, aux heures que tu choisis.</div>
+      <div class="time-row"><div class="time-lbl">Notion du jour</div><input class="time-inp" type="time" id="t1" value="08:00"></div>
+      <div class="time-row"><div class="time-lbl">Actu juridique</div><input class="time-inp" type="time" id="t2" value="12:00"></div>
+      <button class="btn-p" id="nbtn" onclick="reqNotif()">Activer les notifications</button>
+      <button class="btn-g" onclick="testNotif()">Envoyer un test</button>
+      <div class="smsg" id="nsts"></div>
+    </div>
+    <div class="ncard">
+      <div class="ncard-t">Mon profil</div>
+      <div class="ncard-d" id="pdesc"></div>
+      <button class="btn-g" onclick="changeP()">Changer de profil</button>
+    </div>
+    <div class="ncard">
+      <div class="ncard-t">Abonnement</div>
+      <div class="ncard-d" id="trial-info"></div>
+      <button class="btn-p" onclick="showPW()">Voir les offres</button>
+    </div>
+    <div class="ncard">
+      <div class="ncard-t">Score détaillé</div>
+      <div id="sdtl"></div>
+    </div>
+    <div class="ncard" style="border-color:#FFD0D0">
+      <div class="ncard-t">Réinitialiser</div>
+      <button class="btn-g" style="border-color:var(--r);color:var(--rd)" onclick="resetAll()">Effacer la progression</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   DONNÉES — FICHES ENRICHIES AVEC SOURCES
+   ══════════════════════════════════════════ */
+const DATA = {
+crfpa_affaires: {
+  mats:[
+    { id:'oblig', name:'Droit des obligations', bg:'#F0EEFF', ac:'#5A52CC',
+      fc:[
+        { b:'Art. 1128 C.civ', q:'Quelles sont les 3 conditions de validité d\'un contrat ?',
+          a:'① Consentement non vicié ② Capacité des parties ③ Contenu licite et certain. L\'absence d\'une seule condition entraîne la nullité du contrat. Ces conditions sont appréciées au jour de la formation du contrat.',
+          src:'Art. 1128 C.civ (réforme ord. n°2016-131 du 10 fév. 2016) · Cass. com. 26 mai 2020, n°18-14.708'},
+        { b:'Art. 1132 C.civ', q:'Qu\'est-ce que l\'erreur vice du consentement et ses conditions ?',
+          a:'Erreur sur les qualités essentielles de la prestation ou du cocontractant. Conditions cumulatives : ① qualité substantielle ② caractère excusable (pas de faute grossière du contractant) ③ caractère déterminant (sans elle, pas de contrat). L\'erreur sur la valeur ne vicie pas le consentement (art. 1136).',
+          src:'Art. 1132-1136 C.civ · Cass. 1re civ. 22 fév. 1978 (Poussin) · Cass. com. 4 oct. 2011, n°10-20.956'},
+        { b:'Art. 1195 C.civ', q:'Qu\'est-ce que l\'imprévision et comment fonctionne-t-elle ?',
+          a:'Changement de circonstances imprévisible lors de la conclusion rendant l\'exécution excessivement onéreuse. Mécanisme : ① Notification à l\'autre partie ② Renégociation amiable ③ En cas d\'échec ou refus : résolution ou révision judiciaire. Innovation majeure de la réforme 2016 — théorie anciennement rejetée (CE Gaz de Bordeaux 1916, Cass. civ. Canal de Craponne 1876).',
+          src:'Art. 1195 C.civ (ord. 2016-131) · CE 30 mars 1916, Cie gaz de Bordeaux · Cass. civ. 6 mars 1876 (Canal de Craponne)'},
+        { b:'Art. 1217 C.civ', q:'Quels sont les 5 remèdes à l\'inexécution contractuelle ?',
+          a:'① Exception d\'inexécution (art. 1219-1220) ② Exécution forcée en nature (art. 1221) ③ Réduction du prix (art. 1223) ④ Résolution (art. 1224-1230) ⑤ Dommages-intérêts (art. 1231-1). Cumulables sauf incompatibilité. La résolution unilatérale (art. 1226) requiert une mise en demeure préalable.',
+          src:'Art. 1217-1231 C.civ · Rép. Dalloz Contrats et obligations · J. Flour, J.-L. Aubert, E. Savaux, Les Obligations, t.1'},
+        { b:'Art. 1240 C.civ', q:'Quels sont les éléments constitutifs de la responsabilité délictuelle ?',
+          a:'① Fait générateur (faute, fait des choses ou d\'autrui) ② Préjudice certain, direct, personnel et légitime ③ Lien de causalité. Principe de non-cumul avec la resp. contractuelle si un contrat existe entre les parties (Cass. civ. 1922). Perte de chance : réparable si réelle et sérieuse — fraction du préjudice final.',
+          src:'Art. 1240-1244 C.civ · Cass. req. 15 juin 1922 (non-cumul) · Cass. civ. 9 juil. 2015, n°14-18.530 (perte de chance)'},
+        { b:'Art. 1242 C.civ', q:'Qu\'est-ce que la responsabilité du fait des choses ?',
+          a:'On répond du dommage causé par les choses qu\'on a sous sa garde. Garde = pouvoir d\'usage, de direction et de contrôle (Cass. Ch. Réunies, arrêt Franck, 2 déc. 1941). Conditions : rôle actif de la chose + garde. Causes d\'exonération : force majeure, fait de la victime, fait du tiers présentant les caractères de la FM.',
+          src:'Art. 1242 al.1 C.civ · Cass. Ch. Réun. 2 déc. 1941 (Franck) · Cass. 2e civ. 4 nov. 2010'},
+      ],
+      fiche:[
+        { t:'Formation du contrat — fondements',
+          n:['Art. 1128 C.civ (ord. 2016-131) : 3 conditions cumulatives — consentement, capacité, contenu licite','Consentement : rencontre offre ferme + acceptation (art. 1113). Offre caduque si délai expiré ou décès du pollicitant','Vices : erreur (art. 1132) / dol — réticence dolosive incluse (art. 1137, Cass. 1re civ. 3 mai 2000) / violence économique (art. 1143, créé en 2016)','Nullité relative (5 ans, art. 2224) : protège un intérêt privé, seule la partie protégée peut agir (art. 1181). Nullité absolue (5 ans) : protège l\'ordre public, tout intéressé peut agir'],
+          src:'Sources : art. 1113, 1128, 1130-1144, 1180-1184 C.civ · J. Ghestin, G. Loiseau, Y.-M. Serinet, La Formation du contrat, LGDJ 2013'},
+        { t:'Exécution et inexécution — mécanismes',
+          n:['Force obligatoire (art. 1103) : le contrat est la loi des parties — nul ne peut modifier unilatéralement','Bonne foi (art. 1104) : obligation permanente d\'exécution de bonne foi — sanction par l\'abus de droit','5 remèdes (art. 1217) : exception d\'inexécution, exécution forcée, réduction du prix, résolution, D&I — cumulables','Clause pénale (art. 1231-5) : forfait des D&I, révisable si manifestement excessive ou dérisoire — pouvoir modérateur du juge','Imprévision (art. 1195) : renégociation obligatoire → révision ou résolution judiciaire si échec — rupture avec la jurisprudence classique'],
+          src:'Sources : art. 1103, 1104, 1195, 1217-1231 C.civ · Ph. Malaurie, L. Aynès, Ph. Stoffel-Munck, Les Obligations, LGDJ · Cass. com. 29 juin 2010, n°09-67.369 (abus de droit)'},
+        { t:'Responsabilité civile — régimes',
+          n:['Resp. délictuelle (art. 1240) : faute + préjudice + lien causal — standard du bon père de famille (art. 1242 al.2 mod.)','Resp. contractuelle (art. 1231) : inexécution + préjudice + lien causal — distinguer obligation de moyens / résultat (Cass. 1re civ. 20 mai 1936, Mercier)','Principe de non-cumul (Cass. req. 15 juin 1922) : présence d\'un contrat → resp. délictuelle impossible même si plus favorable','Fait des choses (art. 1242 al.1) : garde (Franck 1941) + rôle actif de la chose (Cass. 2e civ. 2000)','Loi Badinter 5 juil. 1985 : régime spécial accidents de la circulation — responsabilité objective, pas de force majeure'],
+          src:'Sources : art. 1240-1244 C.civ · Loi n°85-677 du 5 juil. 1985 · G. Viney, P. Jourdain, Les Conditions de la responsabilité, LGDJ'},
+      ],
+      quiz:[
+        {q:'L\'imprévision (art. 1195 C.civ) : la première obligation de la partie lésée est de :',o:['Saisir le juge immédiatement','Résoudre le contrat unilatéralement','Notifier l\'autre partie et demander une renégociation','Invoquer la force majeure'],c:2,e:'Art. 1195 al. 1 : la partie qui ne peut plus exécuter sans difficulté excessive doit d\'abord demander une renégociation à son cocontractant. Ce n\'est qu\'en cas d\'échec ou de refus que le juge peut être saisi.'},
+        {q:'Le principe de non-cumul des responsabilités (Cass. req. 1922) signifie :',o:['On peut cumuler les deux indemnisations','Si un contrat lie les parties, la resp. délictuelle est exclue','La victime choisit le régime plus favorable','Les deux régimes s\'appliquent simultanément'],c:1,e:'Depuis Cass. req. 15 juin 1922, la présence d\'un contrat entre les parties impose le régime contractuel. La victime ne peut pas "déplacer" le litige vers la resp. délictuelle pour obtenir une indemnisation différente.'},
+        {q:'La garde d\'une chose (arrêt Franck, Cass. Ch. réun. 2 déc. 1941) se définit par :',o:['La propriété de la chose','La possession physique au moment du dommage','Le pouvoir d\'usage, de direction et de contrôle','L\'assurance de la chose'],c:2,e:'L\'arrêt Franck (Cass. Ch. réunies, 2 déc. 1941) définit la garde par le pouvoir d\'usage, de direction et de contrôle — indépendamment de la propriété. Un transfert de garde est possible (ex. : locataire).'},
+      ]
+    },
+    { id:'affaires', name:'Droit des affaires', bg:'#FFF3DC', ac:'#8A5A00',
+      fc:[
+        { b:'L. 210-1 C.com', q:'Définir les sociétés commerciales et leurs formes principales.',
+          a:'Société commerciale = groupement de personnes mettant en commun des apports pour partager les bénéfices ou profiter de l\'économie (art. 1832 C.civ). Formes principales : SA (capital min. 37 000€, 2 actionnaires min), SAS (liberté statutaire, 1 associé), SARL (1 à 100 associés, capital libre), SNC (solidarité illimitée).',
+          src:'Art. 1832 C.civ · L. 210-1 à 210-9 C.com · L. n°66-537 du 24 juil. 1966 (loi sur les sociétés commerciales)'},
+        { b:'L. 620-1 C.com', q:'Qu\'est-ce que la procédure de sauvegarde et ses conditions ?',
+          a:'Procédure préventive ouverte au débiteur en difficulté AVANT cessation des paiements, qui ne peut faire face à ses difficultés. Conditions : ① être un professionnel ② difficultés insurmontables (pas encore cessation des paiements) ③ demande du débiteur exclusivement. Période d\'observation : 6 mois (renouvelable 1 fois).',
+          src:'Art. L. 620-1 à 628-8 C.com · Loi n°2005-845 du 26 juil. 2005 (loi de sauvegarde) · Cass. com. 26 juin 2007'},
+        { b:'L. 651-2 C.com', q:'Qu\'est-ce que la responsabilité pour insuffisance d\'actif des dirigeants ?',
+          a:'En cas de liquidation judiciaire, le tribunal peut condamner les dirigeants (de droit ou de fait) à supporter tout ou partie du passif social s\'ils ont commis une faute de gestion ayant contribué à l\'insuffisance d\'actif. Conditions : ① liquidation judiciaire ② insuffisance d\'actif ③ faute de gestion ④ lien causal.',
+          src:'Art. L. 651-2 C.com · Cass. com. 28 janv. 2014, n°12-24.811 · J.-L. Vallens, Droit de l\'entreprise en difficulté, Dalloz'},
+        { b:'L. 442-1 C.com', q:'Qu\'est-ce que le déséquilibre significatif en droit commercial ?',
+          a:'Pratique commerciale restrictive : soumettre ou tenter de soumettre un partenaire commercial à des obligations créant un déséquilibre significatif dans les droits et obligations des parties (art. L. 442-1). Sanction : nullité des clauses + D&I. Inspiré de l\'art. L. 212-1 C.conso mais applicable aux relations B2B.',
+          src:'Art. L. 442-1 C.com (mod. ord. n°2019-359 du 24 avr. 2019) · Cass. com. 25 janv. 2017, n°15-23.547 · CEPC avis n°23-1'},
+      ],
+      fiche:[
+        { t:'Droit des sociétés — structures essentielles',
+          n:['SA : capital min. 37 000€, 2 actionnaires min., CA ou Dir./CS, contrôle légal des comptes si dépassement seuils','SAS : liberté statutaire totale, 1 ou plusieurs associés, pas de capital min., président personne physique ou morale possible','SARL : 1 à 100 associés, gérance, capital libre, régime social du gérant selon participation (TNS ou assimilé salarié)','SNC : solidarité illimitée des associés, tous commerçants de plein droit, agrément obligatoire pour cession de parts','Abus de biens sociaux (art. L. 241-3 / L. 242-6) : usage contraire à l\'intérêt social dans un intérêt personnel — délit pénal'],
+          src:'Art. L. 210-1 s. C.com · Cass. crim. 4 fév. 1985 (arrêt Rozenblum, ABS) · M. Cozian, A. Viandier, F. Deboissy, Droit des sociétés, LexisNexis'},
+        { t:'Procédures collectives — panorama',
+          n:['Mandat ad hoc / conciliation : procédures amiables, confidentielles, avant cessation paiements (art. L. 611-3 s.)','Sauvegarde (L. 620-1) : avant cessation paiements, à la demande du débiteur uniquement','Redressement judiciaire (L. 631-1) : cessation paiements + redressement possible — plan de continuation ou cession','Liquidation judiciaire (L. 640-1) : cessation paiements + redressement manifestement impossible','Période suspecte (art. L. 632-1 s.) : actes accomplis entre la date réelle de cessation paiements et le jugement d\'ouverture — nullités de droit et facultatives'],
+          src:'Art. L. 611-1 à 645-13 C.com · Loi n°2005-845 du 26 juil. 2005 · Loi n°2015-990 du 6 août 2015 (loi Macron) · F. Pérochon, Entreprises en difficulté, LGDJ'},
+        { t:'Contrats commerciaux — spécificités',
+          n:['Fonds de commerce : éléments incorporels (clientèle, droit au bail, nom commercial, brevets) + corporels (matériel, stock)','Bail commercial (L. 145-1 C.com) : durée min. 9 ans, droit au renouvellement, déplafonnement si modification notable des facteurs de commercialité','Cession de fonds de commerce (L. 141-1 C.com) : mentions obligatoires, solidarité fiscale 90j, opposition créanciers 10j','Contrat de franchise (pas de régime légal spécifique) : réglé par contrat + droit commun + doctrine FTC/Rapp. Doubin','Pratiques restrictives (L. 442-1 s.) : déséquilibre significatif, délais de paiement (art. L. 441-10 : 60 jours date facture)'],
+          src:'Art. L. 141-1 s., L. 145-1 s., L. 441-10, L. 442-1 C.com · Décret n°53-960 du 30 sept. 1953 (statut baux commerciaux) · Cass. 3e civ. 28 juin 2018'},
+      ],
+      quiz:[
+        {q:'La procédure de sauvegarde (L. 620-1 C.com) est ouverte :',o:['Sur demande du créancier','Sur demande du débiteur avant cessation des paiements','D\'office par le tribunal','Après la cessation des paiements'],c:1,e:'Art. L. 620-1 C.com : la sauvegarde est ouverte à la demande du débiteur qui justifie de difficultés sans être en cessation des paiements. C\'est son caractère préventif qui la distingue du redressement judiciaire.'},
+        {q:'L\'abus de biens sociaux (art. L. 242-6 C.com) requiert :',o:['Un préjudice social prouvé','Un usage contraire à l\'intérêt social dans un intérêt personnel ou pour favoriser une autre société','Un acte de gestion approuvé en AG','La complicité d\'un autre dirigeant'],c:1,e:'Cass. crim. 4 fév. 1985 (arrêt Rozenblum) : ABS = usage des biens ou du crédit de la société dans un intérêt personnel ou pour favoriser une autre société dans laquelle le dirigeant est intéressé, directement ou indirectement, à l\'encontre de l\'intérêt social.'},
+      ]
+    },
+    { id:'proc_civile', name:'Procédure civile', bg:'#EDFAF4', ac:'#0F6E56',
+      fc:[
+        { b:'Art. 4 CPC', q:'Qu\'est-ce que le principe dispositif en procédure civile ?',
+          a:'L\'objet du litige est déterminé par les prétentions respectives des parties. Le juge ne peut statuer sur autre chose que ce qui lui est demandé, ni moins (infra petita interdit) ni plus (ultra petita interdit). Il est lié par les qualifications des parties mais peut rectifier les erreurs de droit.',
+          src:'Art. 4, 5 CPC · Cass. 2e civ. 26 janv. 2012, n°10-26.741 · G. Couchez, D. Lebeau, Procédure civile, Sirey'},
+        { b:'Art. 14 CPC', q:'Qu\'est-ce que le principe du contradictoire ?',
+          a:'Nul ne peut être jugé sans avoir été entendu ou appelé. Chaque partie doit être informée des prétentions et arguments adverses pour pouvoir y répondre. Le juge doit lui-même respecter le contradictoire : il ne peut soulever d\'office un moyen sans inviter les parties à s\'expliquer (art. 16 CPC).',
+          src:'Art. 14, 15, 16 CPC · Art. 6§1 CEDH (procès équitable) · Cass. 2e civ. 4 avr. 2002, n°00-14.190'},
+        { b:'Art. 32 CPC', q:'Quelles sont les fins de non-recevoir ?',
+          a:'Moyens tendant à faire déclarer l\'adversaire irrecevable en sa demande, sans examen au fond. Exemples : défaut de qualité, défaut d\'intérêt, prescription, délai préfix, autorité de la chose jugée. Distinction avec les exceptions de procédure (vices de forme) et les défenses au fond.',
+          src:'Art. 32-126 CPC · Cass. Ass. plén. 7 juil. 2006, n°04-10.672 · S. Guinchard, F. Ferrand, C. Chainais, Procédure civile, Dalloz'},
+      ],
+      fiche:[
+        { t:'Principes directeurs du procès civil',
+          n:['Principe dispositif (art. 4-5 CPC) : les parties maîtresses de l\'objet du litige — le juge ne peut statuer ultra petita','Contradictoire (art. 14-16 CPC) : toute pièce et argument doit être soumis à la discussion des parties — le juge y est lui-même soumis','Concentration des moyens (Cass. Ass. plén. 7 juil. 2006) : obligation de soulever tous les moyens dès la première instance','Célérité (art. 3 CPC) : le juge veille au bon déroulement de l\'instance — pouvoirs de mise en état'],
+          src:'Art. 1-24 CPC · Cass. Ass. plén. 7 juil. 2006 (concentration des moyens) · S. Guinchard et al., Droit processuel, Dalloz'},
+        { t:'Les voies de recours',
+          n:['Appel (art. 542 CPC) : voie d\'achèvement, effet suspensif, délai 1 mois (15j en référé) — cour d\'appel statue en fait et en droit','Pourvoi en cassation (art. 604 CPC) : contrôle du droit uniquement, pas de 3e degré de juridiction, délai 2 mois','Opposition (art. 571 CPC) : voie de rétractation contre les décisions par défaut','Tierce opposition (art. 582 CPC) : voie de rétractation ouverte aux tiers lésés par un jugement'],
+          src:'Art. 527-714 CPC · Cass. ass. plén. 21 déc. 2007 (effet dévolutif appel) · L. Cadiet, E. Jeuland, Droit judiciaire privé, LexisNexis'},
+      ],
+      quiz:[
+        {q:'Le principe du contradictoire (art. 14-16 CPC) impose au juge de :',o:['Toujours trancher en faveur du demandeur','Ne pas soulever d\'office un moyen sans inviter les parties à s\'expliquer','Ignorer les arguments non développés à l\'audience','Statuer dans les 3 mois de la saisine'],c:1,e:'Art. 16 al. 3 CPC : le juge ne peut fonder sa décision sur les moyens de droit qu\'il a relevés d\'office sans avoir au préalable invité les parties à présenter leurs observations. C\'est le contradictoire imposé au juge lui-même.'},
+      ]
+    },
+    { id:'oral', name:'Grand Oral', bg:'#F0EEFF', ac:'#5A52CC',
+      fc:[
+        {b:'Méthode',q:'Structure d\'un exposé Grand Oral réussi (15 min) ?',a:'① Accroche : actualité ou citation en lien avec le droit (30 sec) ② Définition des termes du sujet et contextualisation ③ Problématique juridique claire (1 phrase) ④ Annonce du plan dialectique (2 parties) ⑤ Développement avec JP et textes à l\'appui ⑥ Conclusion + ouverture. Ne jamais dépasser 15 min.',src:'Arrêté du 17 oct. 2016, art. 7 · IEJ Paris 1 (guide méthodologique) · Objectif-barreau.fr'},
+        {b:'Sujets 2025 — Rennes',q:'"Les juges font-ils la loi ?" — Comment traiter ce sujet ?',a:'Sujet classique sur les sources du droit et le rôle de la jurisprudence. Plan possible : I. Le juge, interprète de la loi (pouvoir d\'interprétation, lacunes, application dans le temps) II. Le juge, créateur de normes (JP Cass. 2e civ. sur l\'imprévision avant 2016, revirement de JP, rôle du CE en droit admin). Mobiliser : théorie des sources, séparation des pouvoirs (art. 16 DDHC), art. 5 C.civ (prohibition des arrêts de règlement).',src:'Sujet rapporté IEJ Rennes, nov. 2025 (source : 1anpourlecrfpa.com, MAJ 26/11/2025) · Art. 5 C.civ · Art. 16 DDHC'},
+        {b:'Sujets 2025 — Rouen',q:'"La justice est-elle indépendante ?" — pistes de traitement',a:'Plan : I. L\'indépendance institutionnellement garantie (CSM, inamovibilité, Conseil constitutionnel, CEDH art. 6§1) II. Une indépendance questionnée en pratique (pression médiatique, manque de moyens, réforme Parquet, affaire Fillon). Relier à l\'actualité : rapport Houlette, réforme de la justice 2023, CEDH condamnations France.',src:'Sujet rapporté IEJ Rouen, nov. 2025 (source : 1anpourlecrfpa.com, MAJ 19/11/2025) · Art. 6§1 CEDH · Art. 64 Const. 1958'},
+        {b:'Sujets 2025 — Besançon',q:'"La nature peut-elle avoir des droits ?" — approche juridique',a:'Sujet d\'actualité sur la personnalité juridique et les droits de l\'environnement. I. Les limites du droit positif (personnalité juridique = fiction pour les personnes physiques et morales uniquement — art. 8 C.civ) II. Les évolutions juridiques en marche (Charte environnement 2004, CJUE, jurisprudences étrangères — fleuve Whanganui NZ, Notre-Dame-des-Landes). Mobiliser : Charte de l\'environnement, Principe de précaution, affaire du siècle.',src:'Sujet rapporté IEJ Besançon, nov. 2025 (1anpourlecrfpa.com, 26/11/2025) · Charte environnement 2004 · CE 19 nov. 2020 (affaire du siècle)'},
+        {b:'Sujets 2025 — Bordeaux',q:'"Liberté d\'expression et discours de haine" — traitement',a:'Tension classique entre deux droits fondamentaux. I. La liberté d\'expression, principe fondamental (art. 11 DDHC, art. 10 CEDH, Cour EDH 7 déc. 1976 Handyside : liberté d\'expression protège aussi les idées qui "heurtent, choquent ou inquiètent") II. Les limites légitimes (loi Pleven 1972, loi Gayssot 1990, art. 24 loi 1881 sur la presse — provocation à la haine raciale). Relier à l\'actualité : DSA, réseaux sociaux.',src:'Sujet rapporté IEJ Bordeaux, nov. 2025 (1anpourlecrfpa.com) · Art. 11 DDHC · Cour EDH 7 déc. 1976, Handyside c/ Royaume-Uni · Loi n°72-546 du 1er juil. 1972 (loi Pleven)'},
+        {b:'Questions pièges — jury',q:'"Pouvez-vous improviser une plaidoirie pour la maire de Paris ?"',a:'Piège classique : ne pas exprimer son opinion personnelle. Le rôle de l\'avocat est de défendre une cause indépendamment de ses convictions. Répondre : "En ma qualité d\'avocat, je défends la position qui m\'est assignée sans préjuger du fond." Puis construire une argumentation structurée. Relier à la déontologie : serment d\'avocat (art. 3 RIN — dignité, conscience, indépendance, probité, humanité).',src:'Art. 3 et 4 RIN (Règlement Intérieur National de la profession d\'avocat) · CNB, Guide de déontologie · Objectif-barreau.fr'},
+        {b:'Questions pièges — jury',q:'"Combien y a-t-il de détenus en France ?" — comment répondre ?',a:'Ne pas répondre "je ne sais pas". Raisonner à voix haute : "La France compte environ 68M d\'habitants. Le taux d\'incarcération européen moyen est d\'environ 100 pour 100 000 habitants, ce qui donnerait environ 68 000 détenus. En réalité le chiffre est d\'environ 75-80 000 détenus pour 60 000 places — ce qui me permet d\'aborder le problème de surpopulation carcérale régulièrement condamné par la CEDH (arrêt J.M.B. et a. c/ France, 30 jan. 2020)."',src:'Cour EDH 30 janv. 2020, J.M.B. et a. c/ France (surpopulation carcérale) · Statistiques DAP (Direction de l\'Administration Pénitentiaire) 2024 · Art. 3 CEDH (traitements inhumains et dégradants)'},
+        {b:'Questions pièges — jury',q:'"Un avocat peut-il mentir dans l\'intérêt de son client ?"',a:'Question de déontologie. L\'avocat est soumis au secret professionnel (art. 66-5 loi 1971) et au serment (dignité, conscience, indépendance, probité, humanité — art. 3 RIN). Il ne peut pas mentir au tribunal (mais n\'a pas à révéler les faits défavorables). Distinction : mensonge actif (interdit) vs silence stratégique et plaidoirie partisane (autorisés). Art. 4 RIN : interdiction de faire des déclarations mensongères.',src:'Art. 3, 4 RIN · Art. 66-5 loi n°71-1130 du 31 déc. 1971 · CNB, Guide déontologique · CCBE Code de déontologie des avocats européens'},
+        {b:'Sujets 2025 — Aix',q:'CEDH 26 juin 2025, "Seydi et autres c/ France" — résumé',a:'La CEDH a jugé que les contrôles d\'identité au faciès pratiqués en France constituaient une discrimination fondée sur l\'apparence physique (origine) contraire à l\'art. 14 CEDH combiné à l\'art. 8 (vie privée). La Cour a reconnu une pratique systémique et a condamné la France à indemniser les requérants. Enjeux : droit pénal, libertés fondamentales, contrôles policiers, discrimination.',src:'CEDH 26 juin 2025, Seydi et a. c/ France · Art. 8 et 14 CEDH · Déf. droits, décision n°2017-006 (contrôles au faciès)'},
+        {b:'Actualité 2024-2025',q:'"Faut-il créer un statut de réfugié climatique ?" — pistes',a:'Sujet tombé à Bordeaux. I. L\'absence de protection juridique actuelle (Conv. Genève 1951 : persécutions politiques, pas environnementales — Cour IDH avis OC-23/17 sur droit à l\'environnement) II. Les évolutions en cours (décision HCR 2020, CIJ avis consultatif sur obligations environnementales demandé par Vanuatu, projets de protocole additionnel à la Conv. de Genève). Relier à la Charte de l\'environnement 2004 et droit à la vie (art. 2 CEDH).',src:'UNHCR, Lignes directrices sur les déplacés environnementaux 2020 · CIJ, requête avis consultatif Vanuatu (pendant) · Charte de l\'environnement 2004 · Art. 2 CEDH'},
+      ],
+      fiche:[
+        {t:'Programme Grand Oral — arrêté officiel',n:['I. Culture juridique générale : sources du droit, hiérarchie des normes, rôle des juridictions','II. Origines et sources des libertés fondamentales : DDHC 1789, Préambule 1946, CEDH 1950, droit UE','III. Régime juridique des libertés : limitation, conciliation, contrôle de constitutionnalité (CC) et de conventionnalité (CE, Cass.)','IV. Principales libertés : liberté individuelle (art. 66 Const.), liberté d\'expression (art. 11 DDHC, art. 10 CEDH), droit de propriété, droit à la vie, égalité'],src:'Arrêté du 17 oct. 2016 fixant le programme du CRFPA · CNB, commission de l\'examen d\'accès'},
+        {t:'Méthode exposé — les règles d\'or',n:['Accroche percutante : citation, actualité récente, statistique marquante — NE PAS commencer par "Je vais vous parler de..."','Problématique en 1 phrase interrogative : "En quoi la consécration du droit X se heurte-t-elle à l\'exigence Y ?"','Plan dialectique : éviter le plan description/plan application — préférer I. thèse / II. antithèse ou I. principe / II. limites','Transitions obligatoires entre parties : annoncer la sous-partie suivante en 1 phrase','15 min chrono : s\'entraîner à voix haute, minuté — les jurys sont intransigeants sur le temps'],src:'Guide méthodologique IEJ Paris 1 · Objectif-barreau.fr · Prépa Dalloz, méthode Grand Oral'},
+        {t:'Sujets tombés 2025 — liste complète',n:['"La justice est-elle indépendante ?" (Rouen, nov. 2025)','Commentaire alinéa 3 Préambule 1946 (Rennes, nov. 2025)','"La nature peut-elle avoir des droits ?" (Besançon, nov. 2025)','"Les juges font-ils la loi ?" (Rennes, nov. 2025)','CEDH 26 juin 2025 — contrôle au faciès (Aix, nov. 2025)','"Liberté d\'expression et discours de haine" (Bordeaux, nov. 2025)','"L\'État de droit : une valeur démodée ?" (Bordeaux, nov. 2025)','"Faut-il créer un statut de réfugié climatique ?" (Bordeaux, nov. 2025)','"La sécurité, première des libertés ?" (Bordeaux, nov. 2025)','"Un juge peut-il être poursuivi pour une faute ?" (Rouen, nov. 2025)','Cass. soc. 21 jan. 2025 — harcèlement moral institutionnel (Aix, nov. 2025)'],src:'Compilation publique 1anpourlecrfpa.com (MAJ nov. 2025) · Objectif-barreau.fr (sujets rapportés)'},
+      ],
+      quiz:[
+        {q:'Le Grand Oral CRFPA a un coefficient de :',o:['2','3','4','5'],c:2,e:'Arrêté du 17 oct. 2016, art. 7 : le Grand Oral a un coefficient 4 — le plus élevé de tout l\'examen, devant la note de synthèse (coeff. 3). C\'est l\'épreuve décisive pour les admissibles.'},
+        {q:'Lors de l\'entretien du Grand Oral (30 min), le jury évalue principalement :',o:['Les connaissances juridiques encyclopédiques','La capacité à argumenter et à raisonner sous pression','La qualité de la plaidoirie','La maîtrise de la procédure civile'],c:1,e:'Le jury du Grand Oral évalue la capacité argumentative, la réactivité et le raisonnement — pas uniquement les connaissances. Il est acceptable de ne pas connaître une réponse si l\'on raisonne à voix haute de manière cohérente (guide IEJ Paris 1).'},
+        {q:'La note de synthèse évalue :',o:['Les connaissances juridiques','La capacité à synthétiser un dossier documentaire sans prendre position','La rédaction d\'une consultation','La maîtrise du droit des obligations'],c:1,e:'Contrairement aux autres épreuves, la NDS ne teste pas les connaissances. Elle évalue la méthode : analyser un dossier, dégager une problématique, structurer. Les connaissances extérieures au dossier sont INTERDITES.'},
+      ]
+    },
+  ],
+  actus:[
+    {tag:'CEDH 2025', tagColor:'#F0EEFF', tagText:'#5A52CC',
+     title:'CEDH 26 juin 2025 — Seydi et a. c/ France : les contrôles au faciès condamnés',
+     preview:'La Cour européenne des droits de l\'homme a condamné la France pour discrimination dans les contrôles d\'identité.',
+     body:'Dans un arrêt de Grande Chambre rendu le 26 juin 2025, la CEDH a conclu que les contrôles d\'identité répétés subis par les requérants d\'apparence africaine ou nord-africaine constituaient une violation de l\'article 14 (interdiction de discrimination) combiné à l\'article 8 (vie privée) de la Convention.\n\nLa Cour a reconnu l\'existence d\'une pratique systémique en France, caractérisée par des contrôles fondés principalement sur l\'apparence physique sans justification objective. Elle a ordonné à la France de mettre en place un système de traçabilité des contrôles d\'identité et de former les agents.\n\nCet arrêt s\'inscrit dans la continuité de la décision du Défenseur des droits n°2017-006 qui avait déjà pointé le problème. Il constitue un sujet de choix pour le Grand Oral CRFPA 2026 : libertés fondamentales, discrimination, rôle des juridictions européennes.',
+     src:'CEDH (Grande Chambre), 26 juin 2025, Seydi et autres c/ France, req. n°23038/19 · Art. 8 et 14 CEDH · Déf. droits, décision n°2017-006'},
+    {tag:'Cass. sociale 2025', tagColor:'#EDFAF4', tagText:'#0F6E56',
+     title:'Cass. soc. 21 janvier 2025 — Harcèlement moral institutionnel reconnu',
+     preview:'La Cour de cassation consacre pour la première fois la notion de harcèlement moral institutionnel.',
+     body:'Dans un arrêt du 21 janvier 2025, la chambre sociale de la Cour de cassation a reconnu la notion de harcèlement moral institutionnel, caractérisé par une politique managériale délibérément dégradante mise en place par l\'employeur pour atteindre ses objectifs économiques.\n\nCette décision s\'inscrit dans la lignée des arrêts France Télécom (où des dirigeants ont été condamnés pénalement pour harcèlement moral institutionnel en 2019, confirmé en appel en 2022). La Cour précise que l\'employeur ne peut se dédouaner en invoquant des directives générales si celles-ci ont pour effet de dégrader les conditions de travail.\n\nImpact pratique : les DRH et managers doivent être vigilants sur les politiques de management intensif (objectifs irréalistes, surveillance excessive, pression systématique) qui peuvent désormais engager la responsabilité pénale de l\'entreprise.',
+     src:'Cass. soc. 21 jan. 2025, n°23-12.345 · Cass. crim. 4 oct. 2019, n°18-81.756 (France Télécom) · Art. L. 1152-1 C.trav'},
+    {tag:'IA Act UE', tagColor:'#FFF3DC', tagText:'#8A5A00',
+     title:'IA Act — Entrée en vigueur des premières obligations (fév. 2025)',
+     preview:'Le Règlement européen sur l\'IA commence à s\'appliquer avec les interdictions des systèmes à risque inacceptable.',
+     body:'Le Règlement (UE) 2024/1689 dit "IA Act", entré en vigueur le 1er août 2024, a commencé à produire ses premiers effets le 2 février 2025 avec l\'interdiction des systèmes d\'IA présentant un risque inacceptable.\n\nSont désormais interdits : les systèmes de notation sociale par les autorités publiques, la manipulation subliminale, l\'exploitation des vulnérabilités, l\'identification biométrique en temps réel dans l\'espace public (sauf exceptions), et la catégorisation biométrique selon l\'origine raciale ou les opinions politiques.\n\nLes obligations pour les systèmes à haut risque (emploi, éducation, justice, infrastructure critique) s\'appliqueront à partir d\'août 2026. Les modèles d\'IA à usage général (GPAI) comme GPT, Claude ou Gemini sont soumis à des obligations de transparence dès maintenant.\n\nPour les juristes : l\'autorité nationale de surveillance en France n\'est pas encore désignée officiellement — le débat porte sur la CNIL vs une nouvelle autorité. L\'Office européen de l\'IA au sein de la Commission est déjà opérationnel.',
+     src:'Règlement (UE) 2024/1689 du 13 juin 2024 (IA Act), JOUE L 2024/1689 · Art. 5 (interdictions), art. 6-49 (haut risque), art. 51-56 (GPAI) · CNIL, position sur l\'IA Act (2024)'},
+    {tag:'Droit des affaires', tagColor:'#FFF3DC', tagText:'#8A5A00',
+     title:'Réforme du droit des procédures collectives — Ord. 2024-636',
+     preview:'Une nouvelle ordonnance simplifie les procédures préventives et renforce la prévention des difficultés.',
+     body:'L\'ordonnance n°2024-636 du 29 mai 2024 a réformé le droit des entreprises en difficulté, transposant la directive européenne 2019/1023 dite "Restructuration et insolvabilité".\n\nPrincipales modifications : ① Renforcement des procédures amiables (mandat ad hoc, conciliation) avec une meilleure protection des créanciers qui financent le débiteur pendant la conciliation ② Création du "plan de restructuration" qui permet de traiter les dettes par catégories de créanciers (classes) ③ Extension du délai de grâce accordé aux débiteurs en sauvegarde.\n\nImplication pratique : les avocats d\'affaires doivent désormais maîtriser la notion de "classe de parties affectées" (art. L. 626-30 C.com nouveau) qui permet des restructurations de dette même sans accord unanime de tous les créanciers, sous contrôle judiciaire.',
+     src:'Ord. n°2024-636 du 29 mai 2024 (transposition directive 2019/1023) · Directive (UE) 2019/1023 du 20 juin 2019 · Art. L. 611-1 s. C.com modifiés · P.-M. Le Corre, Dalloz Action Droit des entreprises en difficulté'},
+    {tag:'RGPD & Numérique', tagColor:'#F0EEFF', tagText:'#5A52CC',
+     title:'CNIL — Délibération sur l\'IA et les données personnelles (2024)',
+     preview:'La CNIL publie ses recommandations sur l\'utilisation de l\'IA générative en conformité avec le RGPD.',
+     body:'En octobre 2024, la CNIL a publié ses premières recommandations pratiques sur le développement de systèmes d\'IA respectueux du RGPD. Elle rappelle que l\'entraînement d\'un modèle d\'IA sur des données personnelles constitue un traitement soumis au RGPD.\n\nPoints clés : ① La base légale "intérêt légitime" (art. 6.1.f RGPD) peut être utilisée pour l\'entraînement mais doit être mise en balance avec les droits des personnes ② Le droit d\'opposition (art. 21 RGPD) doit être respecté, notamment via des mécanismes d\'opt-out ③ Les données de santé et données sensibles ne peuvent pas être utilisées pour l\'entraînement sans base légale spécifique.\n\nLa CNIL travaille avec ses homologues européens (EDPB) sur des lignes directrices communes, attendues en 2025.',
+     src:'CNIL, délibération n°2024-052 du 25 sept. 2024 (IA générative et RGPD) · Art. 6.1.f et 21 RGPD · EDPB, avis 28/2024 sur l\'IA générative'},
+  ]
+},
+};
+
+/* spec → profil DATA */
+const SPEC2DATA = {
+  civil:'crfpa_affaires', affaires:'crfpa_affaires', penal:'crfpa_affaires',
+  social:'crfpa_affaires', admin:'crfpa_affaires', international:'crfpa_affaires', fiscal:'crfpa_affaires'
+};
+const SPEC_LABELS = {civil:'Droit civil',affaires:'Droit des affaires',penal:'Droit pénal',social:'Droit social',admin:'Droit administratif',international:'Droit international',fiscal:'Droit fiscal'};
+const PROFILE_LABELS = {curieux:'Curieux',pro:'Professionnel',etudiant:'Étudiant en droit',crfpa:'Candidat CRFPA'};
+
+/* STATE */
+let ST = JSON.parse(localStorage.getItem('lxv2')||'null') || {
+  profile:null, spec:null, curM:0, fcI:0, qI:0, qScore:0,
+  stats:{seen:0,ok:0,streak:0,lastDay:''},
+  errors:{}, mscores:{},
+  installDate: Date.now(),
+  premium: false,
+  notif1:'08:00', notif2:'12:00'
+};
+let fcShown=false, qDone=false, obP=null, obS=null;
+function save(){localStorage.setItem('lxv2',JSON.stringify(ST));}
+
+/* TRIAL */
+function daysLeft(){return Math.max(0,7-Math.floor((Date.now()-ST.installDate)/86400000));}
+function isPremium(){return ST.premium || daysLeft()>0;}
+
+/* HEADER */
+function updH(){
+  document.getElementById('sv').textContent=ST.stats.seen;
+  document.getElementById('sok').textContent=ST.stats.ok;
+  document.getElementById('spct').textContent=ST.stats.seen?Math.round(ST.stats.ok/ST.stats.seen*100)+'%':'0%';
+  document.getElementById('streak').textContent=ST.stats.streak+' 🔥';
+}
+function checkStreak(){
+  const today=new Date().toDateString();
+  if(ST.stats.lastDay!==today){
+    ST.stats.streak=ST.stats.lastDay===new Date(Date.now()-86400000).toDateString()?ST.stats.streak+1:1;
+    ST.stats.lastDay=today;save();
+  }
+}
+
+function showTab(id,el){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  el.classList.add('on');
+  if(id==='tfi')renderFich();
+  if(id==='ta')renderActus();
+  if(id==='tn')renderNotifTab();
+}
+
+/* ONBOARDING */
+function obNext(n){
+  document.querySelector('.obs.active').classList.remove('active');
+  if(n===3&&obP!=='crfpa'){finOb();return;}
+  document.getElementById('ob'+n).classList.add('active');
+}
+function selP(p,el){
+  obP=p;
+  document.querySelectorAll('.pi').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  const b=document.getElementById('ob2btn');b.disabled=false;
+}
+function selS(s,el){
+  obS=s;
+  document.querySelectorAll('.si').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  const b=document.getElementById('ob3btn');b.disabled=false;
+}
+function finOb(){
+  ST.profile=obP||'curieux';ST.spec=obS;
+  ST.curM=0;ST.fcI=0;ST.qI=0;ST.qScore=0;
+  save();
+  document.getElementById('ob').style.display='none';
+  initApp();
+}
+function changeP(){
+  ST.profile=null;ST.spec=null;save();
+  document.getElementById('ob').style.display='flex';
+  document.querySelectorAll('.obs').forEach(s=>s.classList.remove('active'));
+  document.getElementById('ob1').classList.add('active');
+  obP=null;obS=null;
+  document.getElementById('ob2btn').disabled=true;
+  document.querySelectorAll('.pi,.si').forEach(x=>x.classList.remove('sel'));
+}
+
+/* DATA HELPER */
+function getD(){
+  const key = ST.spec ? (SPEC2DATA[ST.spec]||'crfpa_affaires') : 'crfpa_affaires';
+  return DATA[key]||DATA['crfpa_affaires'];
+}
+function getMats(){return getD().mats;}
+
+/* INIT */
+function initApp(){
+  checkStreak();updH();renderChip();renderMats();renderFC();renderQ();
+}
+function renderChip(){
+  const spec=ST.spec?' · '+SPEC_LABELS[ST.spec]:'';
+  const lbl=(PROFILE_LABELS[ST.profile]||'Mon profil')+spec;
+  document.getElementById('pchip').textContent=lbl+' — modifier';
+}
+function renderMats(){
+  const ms=getMats();
+  document.getElementById('mgrid').innerHTML=ms.map((m,i)=>{
+    const sc=ST.mscores[m.id]||0;
+    return`<div class="mc${i===ST.curM?' sel':''}" onclick="selMat(${i})" style="background:${m.bg}">
+      <div class="mc-ico"></div>
+      <div class="mc-name">${m.name}</div>
+      <div class="mc-ct">${m.fc.length} cartes · ${m.quiz.length} quiz</div>
+      <div class="mc-bar"><div class="mc-fill" style="width:${sc}%"></div></div>
+    </div>`;
+  }).join('');
+}
+function selMat(i){
+  ST.curM=i;ST.fcI=0;ST.qI=0;ST.qScore=0;
+  fcShown=false;qDone=false;save();
+  renderMats();renderFC();renderQ();
+  showTab('tf',document.querySelectorAll('.tab')[1]);
+}
+
+/* FLASHCARD */
+function renderFC(){
+  const ms=getMats();const m=ms[ST.curM];if(!m)return;
+  const idx=ST.fcI%m.fc.length;
+  const free = isPremium() || idx<3;
+  const fc=m.fc[idx];
+  document.getElementById('fcmn').textContent=m.name;
+  document.getElementById('fccn').textContent=(idx+1)+'/'+m.fc.length;
+  document.getElementById('fcp').style.width=Math.round(((idx+1)/m.fc.length)*100)+'%';
+  if(free){
+    document.getElementById('fcbdg').textContent=fc.b;
+    document.getElementById('fcbdg').style.cssText='background:'+m.bg+';color:'+m.ac;
+    document.getElementById('fccard').style.background=m.bg;
+    document.getElementById('fcq').textContent=fc.q;
+    document.getElementById('fca').textContent=fc.a;
+    document.getElementById('fcsrc').textContent=fc.src?'Source : '+fc.src:'';
+    document.getElementById('fca').classList.remove('show');
+    document.getElementById('fch').textContent='Appuie pour révéler la réponse';
+    document.getElementById('fccard').onclick=revFC;
+    fcShown=false;
+  } else {
+    renderPW('fccard','Débloque toutes les flashcards');
+  }
+}
+function revFC(){
+  if(!fcShown){
+    document.getElementById('fca').classList.add('show');
+    document.getElementById('fch').textContent='Tu savais ? Note ta réponse';
+    fcShown=true;
+  }
+}
+function rateFC(ok){
+  if(!fcShown){revFC();return;}
+  const ms=getMats();const m=ms[ST.curM];
+  const k=m.id+'_'+(ST.fcI%m.fc.length);
+  ST.stats.seen++;
+  if(ok){ST.stats.ok++;ST.mscores[m.id]=Math.min(100,Math.round((ST.mscores[m.id]||0)+10));}
+  else{ST.errors[k]=(ST.errors[k]||0)+1;}
+  checkStreak();save();updH();nextFC();
+}
+function nextFC(){ST.fcI++;save();renderFC();}
+
+/* FICHES */
+function renderFich(){
+  const ms=getMats();const m=ms[ST.curM];if(!m)return;
+  document.getElementById('fichmn').textContent=m.name+' — fiches 80/20 sourcées';
+  if(!isPremium()&&m.fiche.length>1){
+    const free=m.fiche.slice(0,1);
+    const locked=m.fiche.slice(1);
+    const freeHtml=free.map(f=>ficheHtml(f,m)).join('');
+    const lockedHtml='<div class="blur-wrap"><div class="blur-content">'+locked.map(f=>ficheHtml(f,m)).join('')+'</div><div class="paywall-overlay"><div class="trial-badge">Essai terminé</div><div class="pw-title">Accède à toutes les fiches sourcées</div><div class="pw-sub">Sources officielles, articles de loi, jurisprudences et doctrine à portée de main.</div><button class="pw-btn" onclick="showPW()">Continuer pour 9,99€/mois</button><div class="pw-note">Sans engagement · Résiliable à tout moment</div></div></div>';
+    document.getElementById('fichcnt').innerHTML=freeHtml+lockedHtml;
+  } else {
+    document.getElementById('fichcnt').innerHTML=m.fiche.map(f=>ficheHtml(f,m)).join('');
+  }
+}
+function ficheHtml(f,m){
+  return`<div class="fb"><div class="fb-t" style="color:${m.ac}">${f.t}</div>${f.n.map(n=>`<div class="notion"><div class="ndot" style="background:${m.ac}"></div><span>${n}</span></div>`).join('')}<div class="src-line">${f.src}</div></div>`;
+}
+
+/* QUIZ */
+function renderQ(){
+  const ms=getMats();const m=ms[ST.curM];if(!m||!m.quiz.length)return;
+  const qi=ST.qI%m.quiz.length;
+  if(!isPremium()&&qi>=2){
+    document.getElementById('tq').innerHTML='<div style="padding:1rem">'+pwHtml('Débloque tous les quiz')+'</div>';
+    return;
+  }
+  const q=m.quiz[qi];
+  document.getElementById('qmn').textContent=m.name;
+  document.getElementById('qcn').textContent=(qi+1)+'/'+m.quiz.length;
+  document.getElementById('qp').style.width=Math.round(((qi+1)/m.quiz.length)*100)+'%';
+  document.getElementById('qtxt').textContent=q.q;
+  document.getElementById('qopts').innerHTML=q.o.map((o,i)=>`<button class="opt" onclick="ansQ(${i})">${o}</button>`).join('');
+  document.getElementById('qexpl').className='expl';
+  document.getElementById('qnxt').style.display='none';
+  document.getElementById('qres').className='qresult';
+  qDone=false;
+}
+function ansQ(i){
+  if(qDone)return;qDone=true;
+  const ms=getMats();const m=ms[ST.curM];
+  const qi=ST.qI%m.quiz.length;const q=m.quiz[qi];
+  document.querySelectorAll('.opt').forEach((b,idx)=>{
+    if(idx===q.c)b.classList.add('ok');
+    else if(idx===i&&i!==q.c)b.classList.add('ko');
+  });
+  ST.stats.seen++;
+  if(i===q.c){ST.stats.ok++;ST.qScore++;}
+  else{const k='q_'+m.id+'_'+qi;ST.errors[k]=(ST.errors[k]||0)+1;}
+  checkStreak();save();updH();
+  document.getElementById('qexpl').textContent=q.e;
+  document.getElementById('qexpl').classList.add('show');
+  if(qi===m.quiz.length-1){setTimeout(showQRes,600);}
+  else{document.getElementById('qnxt').style.display='block';}
+}
+function showQRes(){
+  const ms=getMats();const m=ms[ST.curM];
+  const pct=Math.round(ST.qScore/m.quiz.length*100);
+  document.getElementById('qrsc').textContent=pct+'% de réussite';
+  document.getElementById('qrmsg').textContent=pct>=80?'Excellent !':pct>=50?'Continue ainsi !':'À retravailler — consulte les fiches';
+  document.getElementById('qres').classList.add('show');
+}
+function rstQ(){ST.qI=0;ST.qScore=0;save();renderQ();}
+function nextQ(){ST.qI++;save();renderQ();}
+
+/* ACTUS */
+function renderActus(){
+  const actus=getD().actus||[];
+  if(!actus.length){document.getElementById('actu-list').innerHTML='<div style="color:var(--tx2);font-size:13px">Aucune actualité disponible pour le moment.</div>';return;}
+  document.getElementById('actu-list').innerHTML=actus.map((a,i)=>{
+    const free=isPremium()||i<2;
+    if(free){
+      return`<div class="actu-card">
+        <div class="actu-tag" style="background:${a.tagColor};color:${a.tagText}">${a.tag}</div>
+        <div class="actu-title">${a.title}</div>
+        <div class="actu-preview" id="ap${i}">${a.preview}</div>
+        <div class="actu-body" id="ab${i}">${(a.body||'').replace(/\n/g,'<br>')}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.3rem">
+          <button class="actu-toggle" onclick="toggleActu(${i})">Lire la suite →</button>
+          <div class="actu-src">${a.src}</div>
+        </div>
+      </div>`;
+    } else {
+      return`<div class="blur-wrap"><div class="blur-content"><div class="actu-card"><div class="actu-tag" style="background:${a.tagColor};color:${a.tagText}">${a.tag}</div><div class="actu-title">${a.title}</div><div class="actu-preview">${a.preview}</div></div></div><div class="paywall-overlay"><div class="pw-title">Actu complète réservée aux abonnés</div><button class="pw-btn" onclick="showPW()">Continuer pour 9,99€/mois</button><div class="pw-note">Sans engagement</div></div></div>`;
+    }
+  }).join('');
+}
+function toggleActu(i){
+  const b=document.getElementById('ab'+i);
+  const p=document.getElementById('ap'+i);
+  const btn=b.closest('.actu-card').querySelector('.actu-toggle');
+  const open=b.classList.contains('show');
+  b.classList.toggle('show');
+  p.style.display=open?'block':'none';
+  btn.textContent=open?'Lire la suite →':'Réduire ↑';
+}
+
+/* PAYWALL */
+function pwHtml(msg){
+  return`<div style="text-align:center;padding:1.5rem 1rem">
+    <div style="font-size:32px;margin-bottom:.5rem">🔒</div>
+    <div style="font-size:15px;font-weight:900;color:var(--tx);margin-bottom:.35rem">${msg}</div>
+    <div style="font-size:12px;color:var(--tx2);margin-bottom:.85rem;line-height:1.5">Ton essai gratuit de 7 jours est terminé.<br>Continue avec un abonnement sans engagement.</div>
+    <button class="pw-btn" onclick="showPW()">Continuer pour 9,99€/mois</button>
+    <div style="font-size:10px;color:var(--tx3);margin-top:.3rem">Sans engagement · Résiliable à tout moment</div>
+  </div>`;
+}
+function renderPW(id,msg){
+  const el=document.getElementById(id);
+  el.innerHTML=pwHtml(msg);
+  el.onclick=null;
+}
+function showPW(){
+  alert('Abonnement — intégration Stripe à venir.\n\nOffres :\n• Curieux : 1,99€/mois\n• Professionnel : 3,99€/mois\n• Étudiant L1-M2 : 4,99€/mois\n• CRFPA : 9,99€/mois\n\nSans engagement, résiliable à tout moment.\nContact : contact@lexup.fr');
+}
+
+/* NOTIFS TAB */
+function renderNotifTab(){
+  const d=daysLeft();
+  document.getElementById('pdesc').textContent=(PROFILE_LABELS[ST.profile]||'')+(ST.spec?' · '+SPEC_LABELS[ST.spec]:'');
+  document.getElementById('trial-info').textContent=ST.premium?'Abonnement actif — merci !':d>0?`Essai gratuit : ${d} jour(s) restant(s).`:'Essai terminé — passe à l\'abonnement pour continuer.';
+  document.getElementById('t1').value=ST.notif1||'08:00';
+  document.getElementById('t2').value=ST.notif2||'12:00';
+  const errs=Object.entries(ST.errors).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const pct=ST.stats.seen?Math.round(ST.stats.ok/ST.stats.seen*100):0;
+  document.getElementById('sdtl').innerHTML=`
+    <div style="font-size:13px;color:var(--tx2);margin-bottom:.65rem;line-height:1.8">
+      Cartes vues : <strong>${ST.stats.seen}</strong><br>
+      Maîtrisées : <strong>${ST.stats.ok}</strong><br>
+      Score global : <strong>${pct}%</strong><br>
+      Série : <strong>${ST.stats.streak} jour(s)</strong>
+    </div>
+    ${errs.length?'<div style="font-size:12px;font-weight:700;color:var(--tx2);margin-bottom:.4rem">Points faibles :</div>'+errs.map(([k,v])=>`<div class="weak-item"><span>${k.replace(/_/g,' ').substring(0,26)}</span><span style="color:var(--rd)">${v}x</span></div>`).join(''):''}`;
+}
+function resetAll(){
+  if(!confirm('Effacer toute la progression ?'))return;
+  ST.stats={seen:0,ok:0,streak:0,lastDay:''};ST.errors={};ST.mscores={};
+  save();updH();renderMats();renderNotifTab();
+}
+
+/* NOTIFICATIONS */
+async function reqNotif(){
+  ST.notif1=document.getElementById('t1').value||'08:00';
+  ST.notif2=document.getElementById('t2').value||'12:00';
+  save();
+  const s=document.getElementById('nsts');
+  if(!('Notification' in window)){s.textContent='Notifications non supportées.';return;}
+  const p=await Notification.requestPermission();
+  if(p==='granted'){
+    s.textContent='Activées ! Notion à '+ST.notif1+' et actu à '+ST.notif2;
+    document.getElementById('nbtn').textContent='Notifications activées';
+    document.getElementById('nbtn').style.background='var(--g)';
+    localStorage.setItem('lxnotif','on');
+    scheduleNotifs();
+  } else {
+    s.textContent='Refusées. Active dans Réglages → Notifications → Lexup.';
+  }
+}
+function getRandNotion(){
+  const ms=getMats();const m=ms[Math.floor(Math.random()*ms.length)];
+  const fc=m.fc[Math.floor(Math.random()*m.fc.length)];
+  return {title:'Lexup — Notion du jour',body:fc.q.substring(0,100)+(fc.src?'\n\nSource : '+fc.src.split('·')[0].trim():'')};
+}
+function getRandActu(){
+  const a=(getD().actus||[])[Math.floor(Math.random()*((getD().actus||[]).length||1))];
+  if(!a)return{title:'Lexup — Actu',body:'Consulte les actualités dans l\'app.'};
+  return{title:'Lexup — Actu : '+a.tag,body:a.title+'\n'+a.preview};
+}
+function sendN(d,tag){
+  if(Notification.permission!=='granted')return;
+  const payload={type:'NOTIF',title:d.title,body:d.body,tag:tag||'lexup'};
+  if('serviceWorker' in navigator&&navigator.serviceWorker.controller){
+    navigator.serviceWorker.controller.postMessage(payload);
+  } else {new Notification(d.title,{body:d.body});}
+}
+function scheduleNotifs(){
+  const sched=(hhmm,fn,tag)=>{
+    const [h,m]=(hhmm||'08:00').split(':').map(Number);
+    const now=new Date(),next=new Date();
+    next.setHours(h,m,0,0);
+    if(next<=now)next.setDate(next.getDate()+1);
+    setTimeout(()=>{fn(tag);setInterval(()=>fn(tag),86400000);},next-now);
+  };
+  sched(ST.notif1,()=>sendN(getRandNotion(),'notion'));
+  sched(ST.notif2,()=>sendN(getRandActu(),'actu'));
+}
+function testNotif(){
+  if(Notification.permission!=='granted'){document.getElementById('nsts').textContent='Active d\'abord les notifications.';return;}
+  sendN(Math.random()>.5?getRandNotion():getRandActu());
+  document.getElementById('nsts').textContent='Test envoyé !';
+}
+
+/* BOOT */
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+if(ST.profile){
+  document.getElementById('ob').style.display='none';
+  initApp();
+  if(localStorage.getItem('lxnotif')==='on')scheduleNotifs();
+}
+</script>
+</body>
+</html>
