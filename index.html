@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#6C63FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Lexup">
+<title>Lexup — Maîtrise le droit</title>
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --violet:#6C63FF;--violet-l:#A78BFA;--violet-bg:#F0EEFF;--violet-border:#C4BFEE;
+  --jaune:#FFB347;--jaune-bg:#FFF3DC;--jaune-border:#FFD98A;
+  --menthe:#4ECBA5;--menthe-bg:#E1F8F2;--menthe-border:#9FE1CB;
+  --corail:#FF7B7B;--corail-bg:#FFF0EE;--corail-border:#FFC4BC;
+  --bleu:#4A90E2;--bleu-bg:#EAF3FF;--bleu-border:#B5D4F4;
+  --rose:#E87DC8;--rose-bg:#FBEAF7;--rose-border:#F4C0E5;
+  --vert:#5CB85C;--vert-bg:#EAF5EA;--vert-border:#A8D9A8;
+  --bg:#faf9f7;--bg2:#f3f2ef;--bg3:#eceae4;
+  --text:#1a1826;--text2:#6b6880;--text3:#aaa8b8;
+  --white:#ffffff;--border:#e8e5f0;
+  --r:14px;--r-sm:8px;--r-lg:20px;--r-xl:28px;
+  --shadow:0 2px 12px rgba(108,99,255,.08);
+  --shadow-md:0 4px 24px rgba(108,99,255,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
+h1,h2,h3,.font-display{font-family:'Nunito',sans-serif}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;flex-direction:column;animation:fadeIn .25s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── ONBOARDING ── */
+.ob-wrap{flex:1;padding:2rem 1.5rem;display:flex;flex-direction:column}
+.ob-logo{font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:var(--violet);letter-spacing:-.03em;margin-bottom:.25rem}
+.ob-logo span{color:var(--text)}
+.ob-progress{display:flex;gap:5px;margin-bottom:2rem}
+.ob-dot{height:4px;border-radius:2px;background:var(--border);flex:1;transition:background .3s}
+.ob-dot.done{background:var(--violet)}
+.ob-emoji{font-size:52px;margin-bottom:1rem;display:block}
+.ob-title{font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;color:var(--text);line-height:1.15;margin-bottom:.5rem;letter-spacing:-.02em}
+.ob-title em{color:var(--violet);font-style:normal}
+.ob-sub{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:1.5rem}
+.ob-choices{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem}
+.ob-choice{background:var(--white);border:2px solid var(--border);border-radius:var(--r);padding:.85rem 1rem;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.ob-choice:active{transform:scale(.98)}
+.ob-choice.sel{border-color:var(--violet);background:var(--violet-bg)}
+.ob-choice-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ob-choice-text{flex:1}
+.ob-choice-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:var(--text)}
+.ob-choice-desc{font-size:12px;color:var(--text2);margin-top:1px}
+.ob-choice-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;color:white;flex-shrink:0;transition:all .15s}
+.ob-choice.sel .ob-choice-check{background:var(--violet);border-color:var(--violet)}
+.ob-spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.5rem}
+.ob-spec{background:var(--white);border:2px solid var(--border);border-radius:var(--r);padding:.85rem;cursor:pointer;transition:all .15s;text-align:center}
+.ob-spec:active{transform:scale(.97)}
+.ob-spec.sel{border-color:var(--violet);background:var(--violet-bg)}
+.ob-spec-icon{font-size:22px;margin-bottom:4px}
+.ob-spec-name{font-size:12px;font-weight:700;color:var(--text);line-height:1.3}
+.ob-spec-proc{font-size:10px;color:var(--text3);margin-top:2px}
+.ob-btn{background:var(--violet);color:white;border:none;border-radius:var(--r);padding:15px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;width:100%;cursor:pointer;transition:all .15s;letter-spacing:-.01em;box-shadow:0 4px 16px rgba(108,99,255,.3)}
+.ob-btn:active{transform:scale(.98)}
+.ob-btn:disabled{opacity:.4;cursor:not-allowed}
+.ob-skip{font-size:12px;color:var(--text3);text-align:center;margin-top:.75rem;cursor:pointer}
+
+/* ── MAIN APP ── */
+.app-header{background:var(--white);padding:1rem 1.25rem .75rem;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.app-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.app-logo{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--violet);letter-spacing:-.02em}
+.app-logo span{color:var(--text)}
+.streak-badge{background:var(--jaune-bg);border:1px solid var(--jaune-border);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700;color:#8B5E0A}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat-card{background:var(--bg);border-radius:var(--r-sm);padding:8px;text-align:center}
+.stat-val{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:var(--text)}
+.stat-lbl{font-size:10px;color:var(--text3);margin-top:1px}
+
+/* ── TABS ── */
+.tabs{display:flex;background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:93px;z-index:49;overflow-x:auto}
+.tab{flex:1;min-width:0;padding:10px 4px;text-align:center;font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .15s;white-space:nowrap;font-family:'Nunito',sans-serif}
+.tab.on{color:var(--violet);border-bottom-color:var(--violet)}
+
+/* ── CONTENT ── */
+.content{flex:1;padding:1rem;overflow-y:auto}
+.sec{display:none}.sec.on{display:block}
+
+/* ── MATIÈRES GRID ── */
+.mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+.mat-card{border-radius:var(--r);padding:1rem;cursor:pointer;transition:all .15s;border:2px solid transparent;box-shadow:var(--shadow)}
+.mat-card:active{transform:scale(.97)}
+.mat-card.sel{border-color:var(--violet) !important}
+.mat-icon{font-size:24px;margin-bottom:6px}
+.mat-name{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--text);line-height:1.3;margin-bottom:3px}
+.mat-count{font-size:11px;font-weight:600}
+
+/* ── FLASHCARDS ── */
+.fc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+.fc-mat{font-size:12px;font-weight:700;color:var(--text2)}
+.fc-counter{font-size:12px;color:var(--text3)}
+.progress{height:4px;background:var(--border);border-radius:2px;margin-bottom:.75rem;overflow:hidden}
+.progress-fill{height:100%;background:var(--violet);border-radius:2px;transition:width .4s ease}
+.fc-card{border-radius:var(--r-lg);padding:1.5rem;min-height:220px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;box-shadow:var(--shadow-md);transition:transform .15s;margin-bottom:.75rem;position:relative;overflow:hidden}
+.fc-card::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;opacity:.1;background:white}
+.fc-card:active{transform:scale(.98)}
+.fc-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.3);color:white;margin-bottom:.75rem;backdrop-filter:blur(4px)}
+.fc-question{font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;color:white;line-height:1.45;flex:1}
+.fc-answer{font-size:13px;color:rgba(255,255,255,.9);line-height:1.7;border-top:1px solid rgba(255,255,255,.2);padding-top:.75rem;margin-top:.75rem;display:none}
+.fc-answer.show{display:block}
+.fc-hint{font-size:11px;color:rgba(255,255,255,.6);text-align:center;margin-top:.5rem}
+.fc-btn-row{display:flex;gap:8px}
+.fc-btn{flex:1;padding:11px;border-radius:var(--r);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;border:none;cursor:pointer;transition:all .15s}
+.fc-btn:active{transform:scale(.97)}
+.btn-ko{background:var(--corail-bg);color:#C94B4B;border:2px solid var(--corail-border)}
+.btn-ok{background:var(--menthe-bg);color:#1D8F6E;border:2px solid var(--menthe-border)}
+.btn-next{background:var(--violet);color:white;width:100%;margin-top:8px;box-shadow:0 3px 12px rgba(108,99,255,.25)}
+
+/* ── FICHES ── */
+.fiche-block{background:var(--white);border-radius:var(--r);padding:1.25rem;margin-bottom:.75rem;box-shadow:var(--shadow)}
+.fiche-block-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;margin-bottom:.75rem;display:flex;align-items:center;gap:8px}
+.notion{display:flex;gap:8px;margin-bottom:8px;font-size:13px;color:var(--text2);line-height:1.6;align-items:flex-start}
+.notion-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:6px}
+
+/* ── QUIZ ── */
+.quiz-card{background:var(--white);border-radius:var(--r-lg);padding:1.25rem;box-shadow:var(--shadow-md);margin-bottom:.75rem}
+.quiz-q{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:var(--text);line-height:1.5;margin-bottom:1rem}
+.quiz-opt{width:100%;text-align:left;padding:11px 14px;margin-bottom:8px;background:var(--bg);border:2px solid var(--border);border-radius:var(--r);font-family:'Nunito Sans',sans-serif;font-size:14px;cursor:pointer;color:var(--text);transition:all .12s;font-weight:600}
+.quiz-opt:active{transform:scale(.98)}
+.quiz-opt.correct{background:var(--menthe-bg);border-color:var(--menthe-border);color:#1D8F6E}
+.quiz-opt.wrong{background:var(--corail-bg);border-color:var(--corail-border);color:#C94B4B}
+.quiz-expl{font-size:13px;color:var(--text2);line-height:1.7;border-top:1px solid var(--border);padding-top:.75rem;margin-top:.5rem;display:none}
+.quiz-expl.show{display:block}
+
+/* ── CRFPA ── */
+.crfpa-schema{background:var(--white);border-radius:var(--r-lg);padding:1.25rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.crfpa-phase{border-radius:var(--r);padding:1rem;margin-bottom:.75rem}
+.crfpa-phase-admiss{background:var(--violet-bg);border:1.5px solid var(--violet-border)}
+.crfpa-phase-admiss .crfpa-phase-title{color:#3C3489}
+.crfpa-phase-admis{background:var(--menthe-bg);border:1.5px solid var(--menthe-border)}
+.crfpa-phase-admis .crfpa-phase-title{color:#085041}
+.crfpa-phase-title{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;margin-bottom:.6rem}
+.crfpa-ep-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.crfpa-ep{background:white;border-radius:8px;padding:.65rem .75rem}
+.crfpa-ep-name{font-size:12px;font-weight:700;color:var(--text)}
+.crfpa-ep-detail{font-size:10px;color:var(--text3);margin-top:2px;line-height:1.4}
+.crfpa-coeff{display:inline-block;font-size:10px;font-weight:700;color:var(--violet);background:var(--violet-bg);padding:1px 7px;border-radius:10px;margin-top:3px}
+.crfpa-arrow{text-align:center;font-size:22px;margin:.25rem 0;color:var(--text3)}
+.crfpa-tabs{display:flex;gap:6px;margin-bottom:1rem;overflow-x:auto;padding-bottom:2px}
+.crfpa-tab{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:700;border:2px solid var(--border);background:var(--white);color:var(--text2);cursor:pointer;white-space:nowrap;font-family:'Nunito',sans-serif;transition:all .15s;flex-shrink:0}
+.crfpa-tab.on{background:var(--violet);border-color:var(--violet);color:white}
+
+/* ── NOTIFS ── */
+.notif-section{padding:.5rem 0}
+.notif-card-ui{background:var(--white);border-radius:var(--r);padding:1.25rem;margin-bottom:.75rem;box-shadow:var(--shadow)}
+.notif-card-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:var(--text);margin-bottom:.4rem}
+.notif-card-desc{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:.85rem}
+.btn-violet{background:var(--violet);color:white;border:none;border-radius:var(--r);padding:11px 18px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;width:100%;transition:all .15s;box-shadow:0 3px 12px rgba(108,99,255,.2)}
+.btn-violet:active{transform:scale(.98)}
+.btn-secondary{background:var(--bg);color:var(--text2);border:2px solid var(--border);border-radius:var(--r);padding:10px 18px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-top:8px;transition:all .15s}
+.notif-status{font-size:12px;color:var(--text3);text-align:center;margin-top:.5rem}
+
+/* ── SCORE SECTION ── */
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.score-mat-card{background:var(--white);border-radius:var(--r);padding:.85rem;box-shadow:var(--shadow)}
+.score-mat-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px}
+.score-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:4px}
+.score-bar-fill{height:100%;border-radius:3px;background:var(--violet);transition:width .6s ease}
+.score-pct{font-size:11px;font-weight:700;color:var(--violet)}
+
+/* ── UTILS ── */
+.section-title{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--text);margin-bottom:.75rem}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
+.install-tip{background:var(--violet-bg);border:1.5px solid var(--violet-border);border-radius:var(--r);padding:1rem;margin-bottom:.75rem;font-size:13px;color:#3C3489;line-height:1.6}
+.install-tip strong{display:block;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;margin-bottom:.3rem}
+.actu-card{background:var(--white);border-radius:var(--r);padding:1rem;margin-bottom:.75rem;box-shadow:var(--shadow);border-left:4px solid var(--violet)}
+.actu-source{font-size:10px;font-weight:700;color:var(--violet);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
+.actu-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:.25rem;line-height:1.4}
+.actu-date{font-size:11px;color:var(--text3)}
+.error-tracker{background:var(--corail-bg);border:1.5px solid var(--corail-border);border-radius:var(--r);padding:1rem;margin-bottom:.75rem}
+.error-title{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:#C94B4B;margin-bottom:.5rem}
+.error-item{font-size:12px;color:#C94B4B;margin-bottom:4px;display:flex;gap:6px;align-items:flex-start;line-height:1.5}
+</style>
+</head>
+<body>
+
+<!-- ══════════ ONBOARDING ══════════ -->
+<div id="ob1" class="screen active">
+  <div class="ob-wrap">
+    <div class="ob-logo">Lex<span>up</span> ⚖️</div>
+    <div class="ob-progress">
+      <div class="ob-dot done"></div><div class="ob-dot"></div><div class="ob-dot"></div>
+    </div>
+    <span class="ob-emoji">👋</span>
+    <h1 class="ob-title">Bienvenue sur <em>Lexup</em> !</h1>
+    <p class="ob-sub">Le droit rendu simple, fun et efficace. Dis-nous qui tu es pour personnaliser ton expérience.</p>
+    <div class="ob-choices" id="profile-choices">
+      <div class="ob-choice" data-profile="curieux" onclick="selectProfile(this)">
+        <div class="ob-choice-icon" style="background:#FFF3DC">🌍</div>
+        <div class="ob-choice-text">
+          <div class="ob-choice-name">Je suis curieux</div>
+          <div class="ob-choice-desc">Culture juridique du quotidien</div>
+        </div>
+        <div class="ob-choice-check">✓</div>
+      </div>
+      <div class="ob-choice" data-profile="pro" onclick="selectProfile(this)">
+        <div class="ob-choice-icon" style="background:#EAF3FF">💼</div>
+        <div class="ob-choice-text">
+          <div class="ob-choice-name">Je suis professionnel</div>
+          <div class="ob-choice-desc">RH, manager, entrepreneur</div>
+        </div>
+        <div class="ob-choice-check">✓</div>
+      </div>
+      <div class="ob-choice" data-profile="etudiant" onclick="selectProfile(this)">
+        <div class="ob-choice-icon" style="background:#E1F8F2">🎓</div>
+        <div class="ob-choice-text">
+          <div class="ob-choice-name">Je suis étudiant en droit</div>
+          <div class="ob-choice-desc">Fac de droit, L1 → M2</div>
+        </div>
+        <div class="ob-choice-check">✓</div>
+      </div>
+      <div class="ob-choice" data-profile="crfpa" onclick="selectProfile(this)">
+        <div class="ob-choice-icon" style="background:#F0EEFF">⚖️</div>
+        <div class="ob-choice-text">
+          <div class="ob-choice-name">Je prépare le CRFPA</div>
+          <div class="ob-choice-desc">Candidat au Barreau</div>
+        </div>
+        <div class="ob-choice-check">✓</div>
+      </div>
+    </div>
+    <button class="ob-btn" id="ob1-btn" onclick="goOb2()" disabled>Continuer →</button>
+    <div class="ob-skip">Gratuit pour commencer · sans carte bancaire</div>
+  </div>
+</div>
+
+<!-- Onboarding 2 : spécialité CRFPA ou année étudiant -->
+<div id="ob2" class="screen">
+  <div class="ob-wrap">
+    <div class="ob-logo">Lex<span>up</span> ⚖️</div>
+    <div class="ob-progress">
+      <div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot"></div>
+    </div>
+    <div id="ob2-content"></div>
+    <button class="ob-btn" id="ob2-btn" onclick="goOb3()" disabled>Continuer →</button>
+    <div class="ob-skip" onclick="goOb3()">Passer cette étape</div>
+  </div>
+</div>
+
+<!-- Onboarding 3 : notifications -->
+<div id="ob3" class="screen">
+  <div class="ob-wrap">
+    <div class="ob-logo">Lex<span>up</span> ⚖️</div>
+    <div class="ob-progress">
+      <div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot done"></div>
+    </div>
+    <span class="ob-emoji">🔔</span>
+    <h2 class="ob-title">Une notion <em>chaque matin</em></h2>
+    <p class="ob-sub">Reçois une notion clé à 8h00 + une actualité juridique à 12h00. 2 minutes par jour suffisent pour progresser.</p>
+    <div style="background:var(--violet-bg);border-radius:var(--r);padding:1rem;margin-bottom:1.25rem">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem">
+        <div style="width:28px;height:28px;background:var(--violet);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:white;font-weight:700;flex-shrink:0">L</div>
+        <div style="font-size:12px;font-weight:700;color:var(--text)">Lexup · 08:00</div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">⚡ Notion du jour — Force majeure</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.5">3 conditions cumulatives : extérieure, imprévisible, irrésistible. Sans les 3 → pas d'exonération.</div>
+    </div>
+    <button class="ob-btn" onclick="activerNotifs()">Activer les notifications 🔔</button>
+    <div class="ob-skip" onclick="startApp()">Commencer sans notifications</div>
+  </div>
+</div>
+
+<!-- ══════════ APP PRINCIPALE ══════════ -->
+<div id="app" class="screen">
+  <div class="app-header">
+    <div class="app-header-top">
+      <div class="app-logo">Lex<span>up</span> ⚖️</div>
+      <div class="streak-badge" id="streak-badge">0 🔥 jours</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-val" id="s-seen">0</div><div class="stat-lbl">cartes vues</div></div>
+      <div class="stat-card"><div class="stat-val" id="s-ok">0</div><div class="stat-lbl">maîtrisées</div></div>
+      <div class="stat-card"><div class="stat-val" id="s-score">0%</div><div class="stat-lbl">score global</div></div>
+    </div>
+  </div>
+
+  <div class="tabs" id="main-tabs">
+    <div class="tab on" onclick="showTab('matieres',this)">Matières</div>
+    <div class="tab" onclick="showTab('flash',this)">Flashcards</div>
+    <div class="tab" onclick="showTab('fiches',this)">Fiches</div>
+    <div class="tab" onclick="showTab('quiz',this)">Quiz</div>
+    <div class="tab" id="tab-crfpa" style="display:none" onclick="showTab('crfpa',this)">CRFPA</div>
+    <div class="tab" onclick="showTab('scores',this)">Scores</div>
+    <div class="tab" onclick="showTab('notifs',this)">Notifs</div>
+  </div>
+
+  <div class="content">
+
+    <!-- MATIÈRES -->
+    <div id="sec-matieres" class="sec on">
+      <div class="section-title" id="mat-titre">Choisir une matière</div>
+      <div class="mat-grid" id="mat-grid"></div>
+    </div>
+
+    <!-- FLASHCARDS -->
+    <div id="sec-flash" class="sec">
+      <div class="fc-header">
+        <div class="fc-mat" id="fc-mat-lbl"></div>
+        <div class="fc-counter" id="fc-cnt"></div>
+      </div>
+      <div class="progress"><div class="progress-fill" id="fc-prog"></div></div>
+      <div class="fc-card" id="fc-card" onclick="revealFC()">
+        <div>
+          <div class="fc-badge" id="fc-badge"></div>
+          <div class="fc-question" id="fc-q"></div>
+          <div class="fc-answer" id="fc-a"></div>
+        </div>
+        <div class="fc-hint" id="fc-hint">Appuie pour révéler la réponse 👆</div>
+      </div>
+      <div class="fc-btn-row">
+        <button class="fc-btn btn-ko" onclick="rateFC(false)">😅 À revoir</button>
+        <button class="fc-btn btn-ok" onclick="rateFC(true)">🎯 Maîtrisé !</button>
+      </div>
+      <button class="fc-btn btn-next" onclick="nextFC()">Carte suivante →</button>
+    </div>
+
+    <!-- FICHES -->
+    <div id="sec-fiches" class="sec">
+      <div class="section-title" id="fiche-lbl"></div>
+      <div id="fiche-content"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="sec-quiz" class="sec">
+      <div class="fc-header">
+        <div class="fc-mat" id="q-mat-lbl"></div>
+        <div class="fc-counter" id="q-cnt"></div>
+      </div>
+      <div class="progress"><div class="progress-fill" id="q-prog"></div></div>
+      <div class="quiz-card">
+        <div class="quiz-q" id="q-question"></div>
+        <div id="q-opts"></div>
+        <div class="quiz-expl" id="q-expl"></div>
+      </div>
+      <button class="btn-violet" id="q-next" style="display:none" onclick="nextQuiz()">Question suivante →</button>
+    </div>
+
+    <!-- CRFPA -->
+    <div id="sec-crfpa" class="sec">
+      <div class="crfpa-tabs" id="crfpa-tabs">
+        <button class="crfpa-tab on" onclick="showCrfpaTab('schema',this)">📊 Schéma épreuves</button>
+        <button class="crfpa-tab" onclick="showCrfpaTab('ecrit',this)">✍️ Écrits</button>
+        <button class="crfpa-tab" onclick="showCrfpaTab('oral',this)">🎤 Grand Oral</button>
+        <button class="crfpa-tab" onclick="showCrfpaTab('anglais',this)">🇬🇧 Anglais</button>
+        <button class="crfpa-tab" onclick="showCrfpaTab('nds',this)">📝 Note de synthèse</button>
+        <button class="crfpa-tab" onclick="showCrfpaTab('actu',this)">📰 Actualité</button>
+      </div>
+      <div id="crfpa-content"></div>
+    </div>
+
+    <!-- SCORES -->
+    <div id="sec-scores" class="sec">
+      <div class="section-title">Mes scores par matière 📊</div>
+      <div class="score-grid" id="score-grid"></div>
+      <div id="errors-section"></div>
+    </div>
+
+    <!-- NOTIFS -->
+    <div id="sec-notifs" class="sec">
+      <div class="section-title">Notifications & paramètres</div>
+      <div class="install-tip">
+        <strong>📱 Installer Lexup sur ton téléphone</strong>
+        iPhone : Safari → Partager → "Sur l'écran d'accueil"<br>
+        Android : Chrome → ⋮ → "Ajouter à l'écran d'accueil"
+      </div>
+      <div class="notif-card-ui">
+        <div class="notif-card-title">🔔 Notifications quotidiennes</div>
+        <div class="notif-card-desc">8h00 : notion clé 80/20 de ta matière · 12h00 : actualité juridique pour le Grand Oral</div>
+        <button class="btn-violet" onclick="activerNotifs()" id="notif-main-btn">Activer les notifications</button>
+        <button class="btn-secondary" onclick="testNotif()">Tester une notification maintenant</button>
+        <div class="notif-status" id="notif-status-main"></div>
+      </div>
+      <div class="notif-card-ui">
+        <div class="notif-card-title">⚙️ Mon profil</div>
+        <div class="notif-card-desc" id="profil-display"></div>
+        <button class="btn-secondary" onclick="changerProfil()">Changer de profil</button>
+      </div>
+      <div class="notif-card-ui">
+        <div class="notif-card-title">📊 Progression complète</div>
+        <div id="progression-detail" style="font-size:13px;color:var(--text2);line-height:2"></div>
+        <button class="btn-secondary" style="color:var(--corail);border-color:var(--corail-border)" onclick="resetAll()">Réinitialiser la progression</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+
+const MATIERES_BASE = [
+  {id:'contrats',name:'Droit des contrats',icon:'📄',bg:'#F0EEFF',border:'#C4BFEE',dot:'#6C63FF',
+   fc:[
+    {b:'formation',q:'Quelles sont les 3 conditions de validité d\'un contrat ?',a:'Consentement non vicié, capacité des parties, contenu licite et certain (art. 1128 C.civ). L\'absence d\'une seule condition entraîne la nullité.'},
+    {b:'vices',q:'Distinguer erreur, dol et violence.',a:'Erreur : sur qualité essentielle, excusable, déterminante. Dol : manœuvres frauduleuses ou réticence. Violence : contrainte illégitime. Les trois sont des vices du consentement entraînant nullité relative.'},
+    {b:'nullité',q:'Différence nullité relative / absolue ?',a:'Relative : intérêt privé, 5 ans, seule la partie protégée agit. Absolue : ordre public, tout intéressé peut agir, 5 ans aussi depuis 2008.'},
+    {b:'imprévision',q:'Qu\'est-ce que l\'imprévision (art. 1195) ?',a:'Changement imprévisible rendant l\'exécution excessivement onéreuse → demande de renégociation, puis révision ou résolution judiciaire si échec.'},
+    {b:'effets',q:'Que signifie la force obligatoire du contrat ?',a:'Le contrat tient lieu de loi entre les parties (art. 1103). Modification ou révocation seulement par accord mutuel ou cas légaux.'},
+   ],
+   fiche:[
+    {t:'Formation',n:['Consentement + capacité + contenu licite (art. 1128)','Offre ferme + acceptation = contrat formé','Obligation d\'info précontractuelle (art. 1112-1)']},
+    {t:'Vices & sanctions',n:['Nullité relative : vices du consentement — 5 ans','Nullité absolue : ordre public — tout intéressé','Clause abusive : réputée non écrite (L212-1 C.conso)']},
+    {t:'Exécution',n:['Force obligatoire : lie comme la loi','Inexécution → résolution, D&I, exécution forcée','Imprévision : renégociation depuis réforme 2016']},
+   ],
+   quiz:[
+    {q:'L\'imprévision (art. 1195) permet en premier lieu de :',o:['Résilier unilatéralement','Demander une renégociation amiable','Saisir immédiatement le juge','Suspendre le contrat'],c:1,e:'La renégociation amiable est la première étape. Ce n\'est qu\'en cas d\'échec que le juge peut être saisi pour révision ou résolution.'},
+    {q:'L\'erreur sur la valeur d\'un bien :',o:['Vicie le consentement','Ne vicie pas le consentement','Est assimilée au dol','Entraîne la nullité absolue'],c:1,e:'Art. 1136 : l\'erreur sur la valeur n\'est pas une erreur sur les qualités essentielles. Elle ne vicie pas le consentement.'},
+   ]},
+  {id:'responsabilite',name:'Responsabilité civile',icon:'⚖️',bg:'#E1F8F2',border:'#9FE1CB',dot:'#4ECBA5',
+   fc:[
+    {b:'fondements',q:'Les 3 éléments de la responsabilité délictuelle ?',a:'Faute (ou fait générateur), préjudice certain et direct, lien de causalité. L\'absence d\'un seul exclut la responsabilité (art. 1240).'},
+    {b:'préjudice',q:'Conditions d\'un préjudice réparable ?',a:'Certain, direct, personnel, légitime. La perte de chance est réparable si réelle et sérieuse (fraction du préjudice final × probabilité).'},
+    {b:'garde',q:'Qu\'est-ce que la garde d\'une chose ?',a:'Pouvoir d\'usage, de direction et de contrôle — indépendamment de la propriété (art. 1242). Ex: le locataire d\'une voiture en est gardien.'},
+    {b:'non-cumul',q:'Le principe de non-cumul signifie ?',a:'Quand un contrat lie les parties, la victime ne peut pas choisir la responsabilité délictuelle pour obtenir une meilleure indemnisation.'},
+   ],
+   fiche:[
+    {t:'Délictuelle (art. 1240)',n:['Faute prouvée par la victime + préjudice + lien causal','Présomption de responsabilité : fait des choses (art. 1242)','Fait d\'autrui : parents, commettants, instituteurs']},
+    {t:'Préjudice',n:['Corporel, matériel, moral — tous réparables','Perte de chance : réelle et sérieuse','Principe de réparation intégrale : ni plus ni moins']},
+    {t:'Causes d\'exonération',n:['Force majeure : extérieure + imprévisible + irrésistible','Fait de la victime : exonération totale ou partielle','Loi Badinter 1985 : accidents circulation — régime spécial']},
+   ],
+   quiz:[
+    {q:'Le principe de non-cumul signifie :',o:['On choisit le régime le plus favorable','La resp. délictuelle est exclue quand un contrat existe','On cumule les deux indemnisations','La victime perd ses droits'],c:1,e:'Le non-cumul interdit d\'invoquer la resp. délictuelle pour un manquement contractuel. Les deux régimes sont étanches.'},
+   ]},
+  {id:'penal',name:'Droit pénal',icon:'🔒',bg:'#FBEAF7',border:'#F4C0E5',dot:'#E87DC8',
+   fc:[
+    {b:'infraction',q:'Les 3 éléments constitutifs d\'une infraction ?',a:'Légal (texte incriminateur), matériel (acte ou omission), moral (intention ou imprudence). Cumulatifs — sans l\'un : pas d\'infraction.'},
+    {b:'classification',q:'Distinguer crime, délit, contravention.',a:'Crimes : réclusion ≥ 10 ans, Cour d\'assises. Délits : < 10 ans, tribunal correctionnel. Contraventions : amende ≤ 3000€, tribunal de police.'},
+    {b:'tentative',q:'La tentative est punissable si ?',a:'Commencement d\'exécution + désistement involontaire (art. 121-5). Désistement volontaire = impunité totale.'},
+    {b:'complicité',q:'Les formes de complicité ?',a:'Par aide ou assistance, par provocation ou instructions. Mêmes peines que l\'auteur principal (art. 121-6-7).'},
+   ],
+   fiche:[
+    {t:'L\'infraction',n:['3 éléments cumulatifs : légal + matériel + moral','Principe de légalité : pas de peine sans texte (art. 111-3)','Tentative : commencement + désistement involontaire']},
+    {t:'Classification',n:['Crimes → Cour d\'assises (jury) → réclusion','Délits → Tribunal correctionnel → emprisonnement','Contraventions → Tribunal de police → amende']},
+    {t:'Irresponsabilité',n:['Trouble mental (art. 122-1) : irresponsabilité totale','Légitime défense : proportionnée + nécessaire + simultanée','État de nécessité : mal évité > mal causé']},
+   ],
+   quiz:[
+    {q:'Le désistement volontaire avant consommation :',o:['Aggrave la peine','Constitue une cause d\'irresponsabilité','N\'a aucun effet','Réduit la peine de moitié'],c:1,e:'Art. 121-5 : si le désistement est volontaire, la tentative n\'est pas constituée → impunité totale.'},
+   ]},
+  {id:'travail',name:'Droit du travail',icon:'👔',bg:'#FFF3DC',border:'#FFD98A',dot:'#FFB347',
+   fc:[
+    {b:'contrat',q:'Les 3 éléments du contrat de travail ?',a:'Prestation de travail, rémunération, lien de subordination (donner des ordres, contrôler, sanctionner). Ce dernier est le critère décisif.'},
+    {b:'rupture',q:'Faute grave vs faute lourde ?',a:'Grave : impossible maintien → pas de préavis ni indemnité licenciement. Lourde : intention de nuire → prive aussi de l\'indemnité compensatrice congés payés.'},
+    {b:'discrimination',q:'Définir la discrimination au travail.',a:'Traitement défavorable sur critère prohibé (origine, sexe, âge, handicap…). Art. L1132-1 : actes nuls + renversement de la charge de la preuve.'},
+    {b:'RC',q:'Qu\'est-ce que la rupture conventionnelle ?',a:'Rupture d\'un CDI par accord, homologuée par la Dreets. 15 jours de rétractation. Ouvre droit aux allocations chômage (contrairement à la démission).'},
+   ],
+   fiche:[
+    {t:'Le contrat',n:['3 éléments : travail + rémunération + subordination','CDI droit commun — CDD : liste limitative (L1242-2)','Période d\'essai : expressément stipulée']},
+    {t:'Rupture',n:['Licenciement : cause réelle et sérieuse + procédure','Démission : acte unilatéral clair — pas d\'indemnités','Rupture conventionnelle : accord + homologation + 15j']},
+    {t:'Collectif',n:['CSE obligatoire dès 11 salariés','Droit de grève : suspend le contrat, ne le rompt pas','Accord collectif peut déroger à la loi dans certains cas']},
+   ],
+   quiz:[
+    {q:'La rupture conventionnelle homologuée :',o:['Prive des allocations chômage','Ouvre droit aux allocations chômage','N\'est possible qu\'après 2 ans','Dispense d\'entretien préalable'],c:1,e:'La rupture conventionnelle homologuée par la Dreets permet au salarié de percevoir les allocations chômage, contrairement à la démission.'},
+   ]},
+  {id:'admin',name:'Droit administratif',icon:'🏛️',bg:'#EAF3FF',border:'#B5D4F4',dot:'#4A90E2',
+   fc:[
+    {b:'AAU',q:'Définir l\'acte administratif unilatéral (AAU).',a:'Décision d\'une autorité administrative s\'imposant aux administrés sans leur consentement, produisant des effets de droit. Contrôlé par le juge administratif.'},
+    {b:'REP',q:'Délai de droit commun pour un REP ?',a:'2 mois à compter de la notification ou publication de la décision (art. R421-1 CJA). Passé ce délai : irrecevabilité.'},
+    {b:'responsabilité',q:'Faute de service vs faute personnelle ?',a:'Faute de service : engage la responsabilité de l\'administration. Faute personnelle : gravité particulière ou hors service → responsabilité personnelle de l\'agent.'},
+   ],
+   fiche:[
+    {t:'L\'acte administratif',n:['AAU : décision unilatérale sans consentement','Retrait : 4 mois pour les actes créateurs de droits','Hiérarchie des normes : l\'AAU doit respecter la loi']},
+    {t:'Contentieux',n:['REP : annulation de l\'acte illégal (2 mois)','Plein contentieux : indemnisation + modification','TA → CAA → Conseil d\'État (cassation)']},
+    {t:'Responsabilité',n:['Faute de service : engage l\'administration','Sans faute : risque, rupture d\'égalité','Prescription quadriennale : 4 ans contre l\'État']},
+   ],
+   quiz:[
+    {q:'Le délai de droit commun pour le REP est de :',o:['1 mois','2 mois','3 mois','6 mois'],c:1,e:'Art. R421-1 CJA : 2 mois à compter notification ou publication. Délai franc, sans prolongation en général.'},
+   ]},
+  {id:'constitutionnel',name:'Droit constitutionnel',icon:'📜',bg:'#EAF5EA',border:'#A8D9A8',dot:'#5CB85C',
+   fc:[
+    {b:'hiérarchie',q:'La hiérarchie des normes de Kelsen ?',a:'Constitution > traités > lois > règlements > actes individuels. Chaque norme inférieure doit être conforme à la supérieure.'},
+    {b:'QPC',q:'Qu\'est-ce que la QPC et depuis quand ?',a:'Question Prioritaire de Constitutionnalité depuis 2008 (en vigueur 2010) : tout justiciable peut contester la constitutionnalité d\'une loi en vigueur. Filtrée par Cass. ou CE.'},
+    {b:'blocs',q:'Le bloc de constitutionnalité comprend ?',a:'Constitution 1958 + Préambule 1946 + DDHC 1789 + Charte de l\'environnement 2004 + PFRLR. Tous ont valeur constitutionnelle.'},
+   ],
+   fiche:[
+    {t:'Sources',n:['Bloc constitutionnel : Const. 1958 + Préambule 1946 + DDHC 1789 + Charte 2004','Art. 55 : primauté des traités sur la loi','Art. 34 (loi) vs art. 37 (règlement) : domaines distincts']},
+    {t:'Institutions Ve République',n:['Président : clé de voûte, élu 5 ans au SUD','49-3 : engagement de responsabilité sur un texte','Dissolution AN : art. 12, pouvoir propre du Président']},
+    {t:'Contrôle de constitutionnalité',n:['A priori (art. 61) : avant promulgation','A posteriori : QPC depuis 2010','Décisions CC : autorité de la chose jugée erga omnes']},
+   ],
+   quiz:[
+    {q:'La QPC peut être soulevée :',o:['Uniquement devant le Conseil constitutionnel','Devant toute juridiction, filtrée vers le CC','Seulement en première instance','Par le gouvernement uniquement'],c:1,e:'La QPC peut être soulevée devant toute juridiction. Elle est filtrée par Cass. ou CE avant transmission éventuelle au Conseil constitutionnel.'},
+   ]},
+  {id:'numerique',name:'Droit du numérique',icon:'💻',bg:'#F0EEFF',border:'#C4BFEE',dot:'#6C63FF',
+   fc:[
+    {b:'RGPD',q:'Les 6 principes fondamentaux du RGPD ?',a:'Licéité/loyauté/transparence, limitation des finalités, minimisation, exactitude, limitation de conservation, intégrité/confidentialité + accountability (art. 5).'},
+    {b:'bases légales',q:'Les 6 bases légales du traitement (art. 6 RGPD) ?',a:'Consentement, contrat, obligation légale, intérêts vitaux, mission d\'intérêt public, intérêts légitimes. Le consentement n\'est pas la seule base !'},
+    {b:'droits',q:'Les droits des personnes concernées ?',a:'Accès, rectification, effacement (droit à l\'oubli), opposition, portabilité, limitation du traitement, pas de décision automatisée (art. 12-22 RGPD).'},
+    {b:'IA Act',q:'La logique de classification de l\'IA Act ?',a:'Règlement 2024/1689 : risque inacceptable (interdit) → haut risque (obligations renforcées) → risque limité (transparence) → risque minimal (libre).'},
+    {b:'violation',q:'Délai de notification d\'une violation de données ?',a:'72 heures à la CNIL (art. 33 RGPD) après avoir pris connaissance. Notification aux personnes concernées si risque élevé (art. 34).'},
+    {b:'DSA/NIS',q:'DSA et NIS 2 en résumé ?',a:'DSA (2022) : responsabilité des plateformes selon taille — VLOP obligations renforcées. NIS 2 (2022) : cybersécurité étendue — signalement incidents, responsabilité dirigeants.'},
+   ],
+   fiche:[
+    {t:'RGPD essentiel',n:['6 principes + accountability : documenter, prouver','6 bases légales : consentement ≠ seule option','Violation : 72h à la CNIL + notif personnes si risque élevé','Sanctions : jusqu\'à 4% CA mondial ou 20M€']},
+    {t:'IA Act (2024/1689)',n:['Risque inacceptable : interdit (notation sociale, manipulation)','Haut risque : conformité avant mise sur marché','GPAI models : obligations selon capacités et risques systémiques','Autorité France : CNIL + Office européen de l\'IA']},
+    {t:'Responsabilité numérique',n:['Hébergeurs : irresponsabilité de principe (LCEN/DSA)','Droit à l\'oubli : déréférencement (CJUE Google Spain 2014)','Données de santé : HDS obligatoire, finalités strictes','NIS 2 : signalement incidents, mesures de sécurité']},
+   ],
+   quiz:[
+    {q:'Sous le RGPD, le consentement est :',o:['La seule base légale valide','L\'une des 6 bases légales possibles','Obligatoire pour tout traitement','Suffisant pour les données sensibles'],c:1,e:'Art. 6 RGPD liste 6 bases légales alternatives. Le consentement est souvent surexploité — l\'intérêt légitime ou l\'exécution d\'un contrat sont souvent plus adaptés.'},
+    {q:'Le délai de notification d\'une violation à la CNIL est de :',o:['24 heures','48 heures','72 heures','7 jours'],c:2,e:'Art. 33 RGPD : 72 heures après avoir pris connaissance de la violation. Passé ce délai, la notification doit être motivée sur le retard.'},
+   ]},
+];
+
+// CRFPA data
+const SPECIALITES = [
+  {id:'civil',name:'Droit civil',icon:'📋',proc:'Procédure civile'},
+  {id:'affaires',name:'Droit des affaires',icon:'🏢',proc:'Procédure civile'},
+  {id:'penal',name:'Droit pénal',icon:'🔒',proc:'Procédure pénale'},
+  {id:'social',name:'Droit social',icon:'👔',proc:'Procédure civile'},
+  {id:'admin',name:'Droit administratif',icon:'🏛️',proc:'Procédure administrative'},
+  {id:'international',name:'Droit international',icon:'🌍',proc:'Procédure civile'},
+  {id:'fiscal',name:'Droit fiscal',icon:'💰',proc:'Procédure administrative'},
+];
+
+const GRAND_ORAL_QUESTIONS = [
+  {sujet:'La justice est-elle indépendante ?',centre:'Rouen',annee:'2025',type:'question'},
+  {sujet:'La nature peut-elle avoir des droits ?',centre:'Besançon',annee:'2025',type:'question'},
+  {sujet:'Les juges font-ils la loi ?',centre:'Rennes',annee:'2025',type:'question'},
+  {sujet:'Liberté d\'expression et discours de haine',centre:'Bordeaux',annee:'2025',type:'sujet'},
+  {sujet:'Existe-t-il un droit à un environnement sain ?',centre:'Rouen',annee:'2025',type:'question'},
+  {sujet:'Faut-il limiter l\'accès au juge ?',centre:'Bordeaux',annee:'2025',type:'question'},
+  {sujet:'La sécurité, première des libertés ?',centre:'Bordeaux',annee:'2025',type:'sujet'},
+  {sujet:'L\'État de droit : une valeur démodée ?',centre:'Bordeaux',annee:'2025',type:'sujet'},
+  {sujet:'Faut-il créer un statut de "réfugié climatique" ?',centre:'Bordeaux',annee:'2025',type:'question'},
+  {sujet:'Qui juge le juge ?',centre:'Multiple',annee:'2023',type:'classique'},
+  {sujet:'Liberté ou égalité ?',centre:'Multiple',annee:'2023',type:'classique'},
+  {sujet:'Vie privée ou sécurité ?',centre:'Multiple',annee:'2023',type:'classique'},
+  {sujet:'Un avocat peut-il mentir dans l\'intérêt de son client ?',centre:'Multiple',annee:'2023',type:'classique'},
+  {sujet:'Faut-il interdire le tabac ?',centre:'Multiple',annee:'2023',type:'classique'},
+  {sujet:'Commentaire de l\'alinéa 3 du Préambule de 1946',centre:'Rennes',annee:'2025',type:'texte'},
+];
+
+const ACTU_JURIDIQUE = [
+  {source:'Légifrance',titre:'IA Act : entrée en vigueur des premières obligations pour les systèmes à risque élevé',date:'Avril 2026',domaine:'Numérique'},
+  {source:'Conseil constitutionnel',titre:'Décision QPC sur la constitutionnalité du régime de garde à vue',date:'Mars 2026',domaine:'Pénal'},
+  {source:'Cour de cassation',titre:'Arrêt sur la définition du préjudice écologique en responsabilité civile',date:'Mars 2026',domaine:'Civil'},
+  {source:'CNIL',titre:'Mise en demeure d\'un réseau social pour traitement illicite de données biométriques',date:'Février 2026',domaine:'Numérique'},
+  {source:'Conseil d\'État',titre:'Annulation d\'un arrêté municipal restreignant la liberté de manifester',date:'Février 2026',domaine:'Administratif'},
+  {source:'Journal officiel',titre:'Décret relatif à la simplification des procédures civiles d\'exécution',date:'Janvier 2026',domaine:'Procédure'},
+];
+
+const NDS_CONSEILS = [
+  {titre:'Méthode générale',conseil:'La NDS n\'évalue pas tes connaissances juridiques mais ta capacité à synthétiser un dossier. Lis d\'abord tous les documents rapidement pour comprendre le thème, puis identifie le plan.'},
+  {titre:'Les pièges classiques',conseil:'Ne jamais apporter d\'éléments extérieurs au dossier. Ne pas donner ton avis. Respecter strictement le nombre de pages imparti. Reformuler — pas recopier.'},
+  {titre:'Structure',conseil:'Introduction (accroche + problématique + annonce plan) + 2 parties + 2 sous-parties chacune. Transitions entre chaque partie. Conclusion courte (bilan, pas d\'ouverture).'},
+  {titre:'Gestion du temps (5h)',conseil:'30 min lecture + annotation · 30 min plan détaillé · 3h rédaction · 1h relecture et mise en forme. Respecter scrupuleusement ce timing.'},
+  {titre:'Erreurs à éviter',conseil:'Oublier de numéroter les documents. Négliger les documents difficiles (souvent les plus importants). Choisir un plan sans rapport avec les documents. Paraphrase au lieu de synthèse.'},
+];
+
+const ANGLAIS_VOCAB = [
+  {fr:'Arrêt de la Cour de cassation',en:'Judgment of the Court of Cassation'},
+  {fr:'Mise en examen',en:'Being placed under judicial investigation'},
+  {fr:'Garde à vue',en:'Police custody / Detention for questioning'},
+  {fr:'Procureur de la République',en:'Public Prosecutor'},
+  {fr:'Juge d\'instruction',en:'Investigating judge'},
+  {fr:'Cour d\'assises',en:'Assize Court (criminal court)'},
+  {fr:'Référé',en:'Interim / Summary proceedings'},
+  {fr:'Appel',en:'Appeal'},
+  {fr:'Pourvoi en cassation',en:'Application for judicial review / Cassation appeal'},
+  {fr:'Ordonnance de non-lieu',en:'Dismissal order / No-bill'},
+  {fr:'Liberté fondamentale',en:'Fundamental right / freedom'},
+  {fr:'Etat de droit',en:'Rule of law'},
+];
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let state = JSON.parse(localStorage.getItem('lexup_state') || '{}');
+if(!state.profile) state = {
+  profile:null, specialite:null, annee:null,
+  curMat:0, fcIdx:0, quizIdx:0, fcShown:false, quizDone:false,
+  stats:{seen:0,ok:0,streak:0,lastDay:'',matScores:{},errors:[]},
+  onboarded:false
+};
+
+function save(){localStorage.setItem('lexup_state',JSON.stringify(state));}
+
+function getMatieres(){
+  if(state.profile==='crfpa'){
+    const extra = [{
+      id:'obligations',name:'Droit des obligations',icon:'📚',bg:'#FFF3DC',border:'#FFD98A',dot:'#FFB347',
+      fc:[
+        {b:'contrat',q:'Définir les quasi-contrats (art. 1300 C.civ).',a:'Faits volontaires licites créant des obligations sans accord de volontés. Trois : gestion d\'affaires, paiement de l\'indu, enrichissement injustifié.'},
+        {b:'responsabilité',q:'Régime général de la responsabilité contractuelle ?',a:'Inexécution + préjudice + lien causal. Mise en demeure préalable en principe. Faute simple suffit sauf stipulation contraire ou obligation de résultat.'},
+        {b:'obligations',q:'Obligation de moyens vs obligation de résultat ?',a:'Moyens : devoir de diligence (médecin, avocat) — preuve de la faute par le créancier. Résultat : obligation de parvenir au but (transporteur) — responsabilité de plein droit.'},
+      ],
+      fiche:[{t:'Tronc commun CRFPA',n:['Obligations de moyens : preuve de faute par créancier','Obligations de résultat : débiteur répond sauf force majeure','Quasi-contrats : gestion d\'affaires + indu + enrichissement injustifié']}],
+      quiz:[{q:'L\'obligation d\'un médecin envers son patient est :',o:['De résultat','De moyens','Absolue','Sans faute'],c:1,e:'Le médecin a une obligation de moyens : il doit soigner avec diligence et compétence mais ne garantit pas la guérison. La preuve de la faute incombe au patient.'}]
+    }];
+    return [...MATIERES_BASE, ...extra];
+  }
+  return MATIERES_BASE;
+}
+
+// ═══════════════════════════════════════════════
+// ONBOARDING
+// ═══════════════════════════════════════════════
+function selectProfile(el){
+  document.querySelectorAll('.ob-choice').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  state.profile = el.dataset.profile;
+  document.getElementById('ob1-btn').disabled = false;
+  save();
+}
+
+function goOb2(){
+  document.getElementById('ob1').classList.remove('active');
+  document.getElementById('ob2').classList.add('active');
+  const c = document.getElementById('ob2-content');
+  if(state.profile==='crfpa'){
+    c.innerHTML = `
+      <span class="ob-emoji">⚖️</span>
+      <h2 class="ob-title">Ta <em>spécialité</em> CRFPA ?</h2>
+      <p class="ob-sub">Ton contenu sera adapté à ta spécialité + la procédure associée. Modifiable plus tard.</p>
+      <div class="ob-spec-grid" id="spec-choices">${SPECIALITES.map(s=>`
+        <div class="ob-spec" data-spec="${s.id}" onclick="selectSpec(this)">
+          <div class="ob-spec-icon">${s.icon}</div>
+          <div class="ob-spec-name">${s.name}</div>
+          <div class="ob-spec-proc">→ ${s.proc}</div>
+        </div>`).join('')}
+      </div>`;
+  } else if(state.profile==='etudiant'){
+    c.innerHTML = `
+      <span class="ob-emoji">🎓</span>
+      <h2 class="ob-title">Quelle <em>année</em> ?</h2>
+      <p class="ob-sub">Pour adapter le niveau du contenu à ton cursus.</p>
+      <div class="ob-choices" id="annee-choices">
+        ${['L1','L2','L3','M1','M2'].map(a=>`
+        <div class="ob-choice" data-annee="${a}" onclick="selectAnnee(this)" style="padding:.7rem 1rem">
+          <div class="ob-choice-icon" style="background:var(--violet-bg);font-size:16px;width:36px;height:36px">${a}</div>
+          <div class="ob-choice-text"><div class="ob-choice-name">${a} en droit</div></div>
+          <div class="ob-choice-check">✓</div>
+        </div>`).join('')}
+      </div>`;
+    document.getElementById('ob2-btn').disabled = false;
+  } else {
+    goOb3(); return;
+  }
+}
+
+function selectSpec(el){
+  document.querySelectorAll('.ob-spec').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  state.specialite = el.dataset.spec;
+  document.getElementById('ob2-btn').disabled = false;
+  save();
+}
+
+function selectAnnee(el){
+  document.querySelectorAll('[data-annee]').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  state.annee = el.dataset.annee;
+  save();
+}
+
+function goOb3(){
+  document.getElementById('ob2').classList.remove('active');
+  document.getElementById('ob3').classList.add('active');
+}
+
+async function activerNotifs(){
+  if(!('Notification' in window)){
+    document.getElementById('notif-status-main') && (document.getElementById('notif-status-main').textContent='Notifications non supportées par ce navigateur.');
+    startApp(); return;
+  }
+  const perm = await Notification.requestPermission();
+  if(perm==='granted'){
+    scheduleNotifs();
+    startApp();
+  } else {
+    startApp();
+  }
+}
+
+function startApp(){
+  state.onboarded = true; save();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('app').classList.add('active');
+  initApp();
+}
+
+// ═══════════════════════════════════════════════
+// APP
+// ═══════════════════════════════════════════════
+function initApp(){
+  checkStreak();
+  updateHeader();
+  if(state.profile==='crfpa'){
+    document.getElementById('tab-crfpa').style.display='flex';
+  }
+  renderMatieres();
+  renderFC();
+  renderFiche();
+  renderQuiz();
+  renderScores();
+  renderNotifSettings();
+  renderProfil();
+}
+
+function showTab(id, el){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('sec-'+id).classList.add('on');
+  el.classList.add('on');
+  if(id==='crfpa') renderCrfpa('schema');
+  if(id==='scores') renderScores();
+}
+
+function updateHeader(){
+  document.getElementById('s-seen').textContent = state.stats.seen;
+  document.getElementById('s-ok').textContent = state.stats.ok;
+  document.getElementById('s-score').textContent = state.stats.seen ? Math.round(state.stats.ok/state.stats.seen*100)+'%':'0%';
+  document.getElementById('streak-badge').textContent = state.stats.streak+'🔥 jours';
+}
+
+function checkStreak(){
+  const today = new Date().toDateString();
+  const yesterday = new Date(Date.now()-86400000).toDateString();
+  if(state.stats.lastDay !== today){
+    state.stats.streak = state.stats.lastDay===yesterday ? state.stats.streak+1 : 1;
+    state.stats.lastDay = today;
+    save();
+  }
+}
+
+// ── MATIERES ──
+function renderMatieres(){
+  const mats = getMatieres();
+  const colours = ['#F0EEFF','#E1F8F2','#FBEAF7','#FFF3DC','#EAF3FF','#EAF5EA','#F0EEFF','#FFF3DC'];
+  const borders = ['#C4BFEE','#9FE1CB','#F4C0E5','#FFD98A','#B5D4F4','#A8D9A8','#C4BFEE','#FFD98A'];
+  const dots = ['#6C63FF','#4ECBA5','#E87DC8','#FFB347','#4A90E2','#5CB85C','#6C63FF','#FFB347'];
+  document.getElementById('mat-titre').textContent = state.profile==='crfpa' ? 'Matières CRFPA 📚' : 'Choisir une matière';
+  document.getElementById('mat-grid').innerHTML = mats.map((m,i)=>`
+    <div class="mat-card" style="background:${m.bg||colours[i%8]};border-color:${i===state.curMat?(m.dot||dots[i%8]):(m.border||borders[i%8])}" onclick="selectMat(${i})">
+      <div class="mat-icon">${m.icon}</div>
+      <div class="mat-name">${m.name}</div>
+      <div class="mat-count" style="color:${m.dot||dots[i%8]}">${m.fc.length} flashcards · ${m.quiz.length} quiz</div>
+    </div>`).join('');
+}
+
+function selectMat(i){
+  state.curMat=i; state.fcIdx=0; state.quizIdx=0; state.fcShown=false; state.quizDone=false;
+  save(); renderMatieres(); renderFC(); renderFiche(); renderQuiz();
+}
+
+// ── FLASHCARDS ──
+function renderFC(){
+  const mats = getMatieres();
+  const m = mats[state.curMat];
+  const fc = m.fc[state.fcIdx % m.fc.length];
+  document.getElementById('fc-mat-lbl').textContent = m.icon+' '+m.name;
+  document.getElementById('fc-cnt').textContent = (state.fcIdx%m.fc.length+1)+' / '+m.fc.length;
+  document.getElementById('fc-prog').style.width = Math.round(((state.fcIdx%m.fc.length+1)/m.fc.length)*100)+'%';
+  document.getElementById('fc-badge').textContent = fc.b;
+  document.getElementById('fc-q').textContent = fc.q;
+  document.getElementById('fc-a').textContent = fc.a;
+  document.getElementById('fc-a').classList.remove('show');
+  document.getElementById('fc-hint').textContent = 'Appuie pour révéler la réponse 👆';
+  document.getElementById('fc-card').style.background = m.dot||'#6C63FF';
+  state.fcShown = false;
+}
+
+function revealFC(){
+  if(!state.fcShown){
+    document.getElementById('fc-a').classList.add('show');
+    document.getElementById('fc-hint').textContent = 'Tu savais ? Note ta réponse 👇';
+    state.fcShown = true;
+  }
+}
+
+function rateFC(ok){
+  if(!state.fcShown){revealFC();return;}
+  const mats = getMatieres();
+  const matId = mats[state.curMat].id;
+  if(!state.stats.matScores[matId]) state.stats.matScores[matId]={seen:0,ok:0};
+  state.stats.seen++; state.stats.matScores[matId].seen++;
+  if(ok){
+    state.stats.ok++; state.stats.matScores[matId].ok++;
+  } else {
+    const q = mats[state.curMat].fc[state.fcIdx % mats[state.curMat].fc.length].q;
+    if(!state.stats.errors) state.stats.errors=[];
+    if(!state.stats.errors.find(e=>e.q===q)){
+      state.stats.errors.unshift({q,mat:mats[state.curMat].name,date:new Date().toLocaleDateString('fr')});
+      if(state.stats.errors.length>10) state.stats.errors.pop();
+    }
+  }
+  checkStreak(); save(); updateHeader(); nextFC();
+}
+
+function nextFC(){
+  const mats = getMatieres();
+  state.fcIdx = (state.fcIdx+1) % mats[state.curMat].fc.length;
+  state.fcShown = false; save(); renderFC();
+}
+
+// ── FICHES ──
+function renderFiche(){
+  const mats = getMatieres();
+  const m = mats[state.curMat];
+  document.getElementById('fiche-lbl').textContent = m.icon+' '+m.name+' — fiche 80/20';
+  document.getElementById('fiche-content').innerHTML = m.fiche.map(f=>`
+    <div class="fiche-block">
+      <div class="fiche-block-title" style="color:${m.dot||'#6C63FF'}">${f.t}</div>
+      ${f.n.map(n=>`<div class="notion"><div class="notion-dot" style="background:${m.dot||'#6C63FF'}"></div><span>${n}</span></div>`).join('')}
+    </div>`).join('');
+}
+
+// ── QUIZ ──
+function renderQuiz(){
+  const mats = getMatieres();
+  const m = mats[state.curMat];
+  const q = m.quiz[state.quizIdx % m.quiz.length];
+  document.getElementById('q-mat-lbl').textContent = m.icon+' '+m.name;
+  document.getElementById('q-cnt').textContent = (state.quizIdx%m.quiz.length+1)+' / '+m.quiz.length;
+  document.getElementById('q-prog').style.width = Math.round(((state.quizIdx%m.quiz.length+1)/m.quiz.length)*100)+'%';
+  document.getElementById('q-question').textContent = q.q;
+  document.getElementById('q-opts').innerHTML = q.o.map((o,i)=>`<button class="quiz-opt" onclick="answerQuiz(${i})">${o}</button>`).join('');
+  document.getElementById('q-expl').className='quiz-expl';
+  document.getElementById('q-next').style.display='none';
+  state.quizDone = false;
+}
+
+function answerQuiz(i){
+  if(state.quizDone) return;
+  state.quizDone = true;
+  const mats = getMatieres();
+  const m = mats[state.curMat];
+  const q = m.quiz[state.quizIdx % m.quiz.length];
+  const matId = m.id;
+  if(!state.stats.matScores[matId]) state.stats.matScores[matId]={seen:0,ok:0};
+  state.stats.seen++; state.stats.matScores[matId].seen++;
+  document.querySelectorAll('.quiz-opt').forEach((b,idx)=>{
+    if(idx===q.c) b.classList.add('correct');
+    else if(idx===i && i!==q.c) b.classList.add('wrong');
+  });
+  if(i===q.c){state.stats.ok++; state.stats.matScores[matId].ok++;}
+  document.getElementById('q-expl').textContent = q.e;
+  document.getElementById('q-expl').classList.add('show');
+  document.getElementById('q-next').style.display='block';
+  checkStreak(); save(); updateHeader();
+}
+
+function nextQuiz(){state.quizIdx++; save(); renderQuiz();}
+
+// ── CRFPA ──
+function showCrfpaTab(id, el){
+  document.querySelectorAll('.crfpa-tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  renderCrfpa(id);
+}
+
+function renderCrfpa(tab){
+  const c = document.getElementById('crfpa-content');
+  const spec = SPECIALITES.find(s=>s.id===state.specialite);
+  if(tab==='schema'){
+    c.innerHTML = `
+      <div class="crfpa-schema">
+        <div style="font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:1rem">Structure de l'examen CRFPA</div>
+        ${spec?`<div style="background:var(--violet-bg);border-radius:var(--r-sm);padding:.75rem;margin-bottom:.75rem;font-size:13px;font-weight:700;color:#3C3489">⚖️ Ta spécialité : ${spec.name} → ${spec.proc}</div>`:''}
+        <div class="crfpa-phase crfpa-phase-admiss">
+          <div class="crfpa-phase-title">📝 Phase 1 — Admissibilité (écrits, septembre)</div>
+          <div class="crfpa-ep-grid">
+            <div class="crfpa-ep"><div class="crfpa-ep-name">Note de synthèse</div><div class="crfpa-ep-detail">5h · Dossier documentaire</div><div class="crfpa-coeff">Coeff. 3 ⭐</div></div>
+            <div class="crfpa-ep"><div class="crfpa-ep-name">Droit des obligations</div><div class="crfpa-ep-detail">3h · Tronc commun</div><div class="crfpa-coeff">Coeff. 2</div></div>
+            <div class="crfpa-ep"><div class="crfpa-ep-name">${spec?spec.name:'Spécialité'}</div><div class="crfpa-ep-detail">3h · Consultation(s)</div><div class="crfpa-coeff">Coeff. 2</div></div>
+            <div class="crfpa-ep"><div class="crfpa-ep-name">${spec?spec.proc:'Procédure'}</div><div class="crfpa-ep-detail">2h · Liée à la spécialité</div><div class="crfpa-coeff">Coeff. 2</div></div>
+          </div>
+        </div>
+        <div class="crfpa-arrow">↓ Moyenne ≥ 10/20</div>
+        <div class="crfpa-phase crfpa-phase-admis">
+          <div class="crfpa-phase-title">🎤 Phase 2 — Admission (oraux, novembre)</div>
+          <div class="crfpa-ep-grid">
+            <div class="crfpa-ep"><div class="crfpa-ep-name">Grand Oral</div><div class="crfpa-ep-detail">1h prép. + 15 min exposé + 30 min jury</div><div class="crfpa-coeff">Coeff. 4 🏆</div></div>
+            <div class="crfpa-ep"><div class="crfpa-ep-name">Anglais juridique</div><div class="crfpa-ep-detail">15 min prép. + 15 min échange</div><div class="crfpa-coeff">Coeff. 1</div></div>
+          </div>
+        </div>
+      </div>`;
+  } else if(tab==='oral'){
+    c.innerHTML = `
+      <div style="margin-bottom:1rem">
+        <div class="section-title">Grand Oral — Questions réelles 🎤</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:.75rem;line-height:1.6">Programme : sources du droit + libertés et droits fondamentaux. Le jury évalue ta capacité à argumenter, pas uniquement tes connaissances.</div>
+        ${GRAND_ORAL_QUESTIONS.map(q=>`
+        <div class="actu-card" style="border-left-color:${q.type==='classique'?'#FFB347':q.type==='texte'?'#4A90E2':'#6C63FF'}">
+          <div class="actu-source">${q.type==='classique'?'📌 Sujet classique':q.type==='texte'?'📄 Texte à commenter':'⚡ Tombé '+q.annee} · ${q.centre}</div>
+          <div class="actu-title">${q.sujet}</div>
+        </div>`).join('')}
+      </div>`;
+  } else if(tab==='nds'){
+    c.innerHTML = `
+      <div class="section-title">Note de synthèse — Méthode ✍️</div>
+      ${NDS_CONSEILS.map(n=>`
+      <div class="fiche-block">
+        <div class="fiche-block-title" style="color:var(--violet)">${n.titre}</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7">${n.conseil}</div>
+      </div>`).join('')}`;
+  } else if(tab==='anglais'){
+    c.innerHTML = `
+      <div class="section-title">Anglais juridique 🇬🇧</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:.75rem;line-height:1.6">L'épreuve évalue le vocabulaire et la compréhension — pas le droit comparé. Focus sur les termes procéduraux et institutionnels.</div>
+      ${ANGLAIS_VOCAB.map(v=>`
+      <div class="fiche-block" style="padding:.85rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <div style="font-size:13px;font-weight:700;color:var(--text);flex:1">${v.fr}</div>
+          <div style="font-size:12px;color:var(--violet);font-weight:600;flex:1;text-align:right">${v.en}</div>
+        </div>
+      </div>`).join('')}`;
+  } else if(tab==='actu'){
+    c.innerHTML = `
+      <div class="section-title">Actualité juridique 📰</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:.75rem;line-height:1.6">L'actualité est essentielle pour le Grand Oral. Lis ces résumés chaque semaine.</div>
+      ${ACTU_JURIDIQUE.map(a=>`
+      <div class="actu-card">
+        <div class="actu-source">${a.source} · ${a.domaine}</div>
+        <div class="actu-title">${a.titre}</div>
+        <div class="actu-date">${a.date}</div>
+      </div>`).join('')}`;
+  } else if(tab==='ecrit'){
+    c.innerHTML = `
+      <div class="section-title">Entraînement écrits ✍️</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:.75rem;line-height:1.6">Utilise les flashcards et quiz des matières correspondant à ton tronc commun et ta spécialité.</div>
+      <div class="fiche-block">
+        <div class="fiche-block-title" style="color:var(--violet)">Droit des obligations — tronc commun</div>
+        <div class="notion"><div class="notion-dot" style="background:var(--violet)"></div><span>Révise dans l'onglet Flashcards → Matière "Droit des obligations"</span></div>
+        <div class="notion"><div class="notion-dot" style="background:var(--violet)"></div><span>Format : consultation (cas pratique) · 3h · Coeff. 2</span></div>
+        <div class="notion"><div class="notion-dot" style="background:var(--violet)"></div><span>Méthode : identification des faits → qualification → règle → solution</span></div>
+      </div>
+      ${spec?`<div class="fiche-block">
+        <div class="fiche-block-title" style="color:var(--violet)">${spec.name} — ta spécialité</div>
+        <div class="notion"><div class="notion-dot" style="background:var(--violet)"></div><span>Révise dans l'onglet Flashcards → matière correspondante</span></div>
+        <div class="notion"><div class="notion-dot" style="background:var(--violet)"></div><span>Procédure associée : ${spec.proc} · 2h · Coeff. 2</span></div>
+      </div>`:''}`;
+  }
+}
+
+// ── SCORES ──
+function renderScores(){
+  const mats = getMatieres();
+  document.getElementById('score-grid').innerHTML = mats.map(m=>{
+    const ms = state.stats.matScores[m.id]||{seen:0,ok:0};
+    const pct = ms.seen ? Math.round(ms.ok/ms.seen*100) : 0;
+    return `<div class="score-mat-card">
+      <div class="score-mat-name">${m.icon} ${m.name}</div>
+      <div class="score-bar"><div class="score-bar-fill" style="width:${pct}%;background:${m.dot||'#6C63FF'}"></div></div>
+      <div class="score-pct" style="color:${m.dot||'#6C63FF'}">${pct}% (${ms.seen} vues)</div>
+    </div>`;
+  }).join('');
+  const errors = state.stats.errors||[];
+  document.getElementById('errors-section').innerHTML = errors.length ? `
+    <div class="error-tracker">
+      <div class="error-title">❌ Notions à retravailler (${errors.length})</div>
+      ${errors.map(e=>`<div class="error-item"><span>•</span><span>${e.q.substring(0,60)}${e.q.length>60?'…':''} <em style="font-size:10px">(${e.mat})</em></span></div>`).join('')}
+    </div>` : '<div style="font-size:13px;color:var(--text3);text-align:center;padding:1rem">Pas encore d\'erreurs enregistrées 🎉</div>';
+}
+
+// ── NOTIFS & SETTINGS ──
+function renderNotifSettings(){
+  const perm = ('Notification' in window) ? Notification.permission : 'default';
+  const st = document.getElementById('notif-status-main');
+  if(st) st.textContent = perm==='granted' ? '✓ Notifications activées' : perm==='denied' ? 'Bloquées — active-les dans les réglages' : '';
+}
+
+function renderProfil(){
+  const labels = {curieux:'🌍 Curieux',pro:'💼 Professionnel',etudiant:'🎓 Étudiant',crfpa:'⚖️ Candidat CRFPA'};
+  const spec = SPECIALITES.find(s=>s.id===state.specialite);
+  let txt = labels[state.profile]||'Non défini';
+  if(state.annee) txt += ' · '+state.annee;
+  if(spec) txt += ' · '+spec.name;
+  const el = document.getElementById('profil-display');
+  if(el) el.textContent = txt;
+  const el2 = document.getElementById('progression-detail');
+  if(el2) el2.innerHTML = `
+    Cartes vues : <strong>${state.stats.seen}</strong><br>
+    Maîtrisées : <strong>${state.stats.ok}</strong><br>
+    Taux de réussite : <strong>${state.stats.seen?Math.round(state.stats.ok/state.stats.seen*100):0}%</strong><br>
+    Série : <strong>${state.stats.streak} jour(s) 🔥</strong>`;
+}
+
+function changerProfil(){
+  if(confirm('Changer de profil ? Ta progression sera conservée.')){
+    state.profile=null; state.specialite=null; state.annee=null; state.onboarded=false;
+    save();
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('ob1').classList.add('active');
+    document.querySelectorAll('.ob-choice').forEach(e=>e.classList.remove('sel'));
+    document.getElementById('ob1-btn').disabled=true;
+  }
+}
+
+function resetAll(){
+  if(confirm('Réinitialiser toute la progression ?')){
+    state.stats={seen:0,ok:0,streak:0,lastDay:'',matScores:{},errors:[]};
+    save(); updateHeader(); renderScores();
+  }
+}
+
+// ── NOTIFICATIONS ──
+function scheduleNotifs(){
+  localStorage.setItem('lexup_notifs','on');
+  scheduleAt(8,0,'notion');
+  scheduleAt(12,0,'actu');
+}
+
+function scheduleAt(h, m, type){
+  const now = new Date();
+  const next = new Date();
+  next.setHours(h,m,0,0);
+  if(next<=now) next.setDate(next.getDate()+1);
+  const delay = next - now;
+  setTimeout(()=>{
+    sendNotif(type);
+    setInterval(()=>sendNotif(type), 24*60*60*1000);
+  }, delay);
+}
+
+function getRandomNotion(){
+  const mats = getMatieres();
+  const m = mats[Math.floor(Math.random()*mats.length)];
+  const fc = m.fc[Math.floor(Math.random()*m.fc.length)];
+  return {title:'⚡ Notion du jour — '+m.name, body:fc.q};
+}
+
+function getRandomActu(){
+  const a = ACTU_JURIDIQUE[Math.floor(Math.random()*ACTU_JURIDIQUE.length)];
+  return {title:'📰 Actu juridique — '+a.domaine, body:a.titre};
+}
+
+function sendNotif(type){
+  if(Notification.permission!=='granted') return;
+  const n = type==='actu' ? getRandomActu() : getRandomNotion();
+  if('serviceWorker' in navigator && navigator.serviceWorker.controller){
+    navigator.serviceWorker.controller.postMessage({type:'SHOW_NOTIF',title:n.title,body:n.body,tag:'lexup-'+type});
+  } else {
+    new Notification(n.title,{body:n.body});
+  }
+}
+
+function testNotif(){
+  if(Notification.permission!=='granted'){
+    alert('Active d\'abord les notifications !'); return;
+  }
+  sendNotif('notion');
+  setTimeout(()=>sendNotif('actu'), 2000);
+}
+
+// ── INIT ──
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').then(()=>{
+    if(localStorage.getItem('lexup_notifs')==='on') scheduleNotifs();
+  }).catch(()=>{});
+}
+
+if(state.onboarded){
+  document.getElementById('ob1').classList.remove('active');
+  document.getElementById('app').classList.add('active');
+  initApp();
+}
+</script>
+</body>
+</html>
